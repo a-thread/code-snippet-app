@@ -1,13 +1,20 @@
 import { Component } from '@angular/core';
+import { AppStore } from './app.component.store'; // Import the AppStore
+import { OAuthService } from './services/oauth-service.service';
+import { GistService } from './services/gist.service';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  imports: [
+    RouterOutlet,
+  ],
+  providers: [
+    AppStore,
+    OAuthService,
+    GistService
+  ]
 })
-export class AppComponent {
-  title = 'code-snippet-app';
-}
+export class AppComponent { }

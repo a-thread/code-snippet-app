@@ -1,0 +1,18 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "module": "ES2022",
+        "target": "ES2022",
+        "outDir": "./dist/server",
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "allowSyntheticDefaultImports": true
+    },
+    "include": [
+        "server.js"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
