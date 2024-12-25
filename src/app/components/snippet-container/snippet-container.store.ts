@@ -3,10 +3,11 @@ import { ComponentStore } from '@ngrx/component-store';
 import { Snippet } from '../../models/snippet';
 import { GistService } from '../../services/gist.service';
 import { Observable, switchMap, tap, withLatestFrom } from 'rxjs';
+import { Gist } from '../../models/gists';
 
 export interface SnippetContainerState {
-    snippets: Snippet[];
-    selectedSnippet: Snippet | null;
+    gists: Gist[];
+    selectedGist: Gist | null;
     githubToken: string | null;
 }
 
@@ -17,19 +18,19 @@ export class SnippetContainerStore extends ComponentStore<SnippetContainerState>
         private gistService: GistService,
     ) {
         super({
-            snippets: [],
-            selectedSnippet: null,
+            gists: [],
+            selectedGist: null,
             githubToken: null,
         });
     }
 
-    readonly snippets$ = this.select(state => state.snippets);
-    readonly selectedSnippet$ = this.select(state => state.selectedSnippet);
+    readonly gists$ = this.select(state => state.gists);
+    readonly selectedGist$ = this.select(state => state.selectedGist);
     readonly githubToken$ = this.select(state => state.githubToken);
 
-    readonly setSnippets = this.updater((state, snippets: Snippet[]) => ({
+    readonly setSnippets = this.updater((state, gists: Gist[]) => ({
         ...state,
-        snippets
+        gists
     }));
 
     readonly setToken = this.updater((state, token: string) => ({
@@ -45,7 +46,7 @@ export class SnippetContainerStore extends ComponentStore<SnippetContainerState>
                     return [];
                 }
                 return this.gistService.getGists(githubToken).pipe(
-                    tap((snippets) => this.setSnippets(snippets)),
+                    tap((gists) => this.setSnippets(gists)),
                     tap(() => this.setToken(githubToken))
                 );
             })
@@ -60,7 +61,7 @@ export class SnippetContainerStore extends ComponentStore<SnippetContainerState>
                     throw new Error('Not authenticated');
                 }
                 return this.gistService.createGist(code, notes, language, token).pipe(
-                    tap((newSnippet) => this.setSnippets([...this.get().snippets, newSnippet]))
+                    tap((newSnippet) => this.setSnippets([...this.get().gists, newSnippet]))
                 );
             })
         )

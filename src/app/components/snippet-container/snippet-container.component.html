@@ -1,16 +1,8 @@
-<div>
-    <h2>Code Snippets</h2>
-    <ul>
-        <li *ngFor="let snippet of snippets$ | async">
-            <pre>{{ snippet.code }}</pre>
-            <p>{{ snippet.notes }}</p>
-            <p><strong>Language:</strong> {{ snippet.language }}</p>
-        </li>
-    </ul>
-
-    <h3>Add a new snippet</h3>
-    <input [(ngModel)]="newCode" placeholder="Code" />
-    <input [(ngModel)]="newNotes" placeholder="Notes" />
-    <input [(ngModel)]="newLanguage" placeholder="Language" />
-    <button (click)="saveSnippet()">Save Snippet</button>
+<div class="container">
+    <h2>Gists</h2>
+    <app-add-snippet></app-add-snippet>
+    <div class="gists-container">
+        <app-gist-card *ngFor="let gist of gists$ | async" [gist]="gist">
+        </app-gist-card>
+    </div>
 </div>

@@ -1,0 +1,16 @@
+<div class="card" *ngIf="gist">
+    <div class="card-header">
+        <h3>{{ gist.description }}</h3>
+        <div>
+            <a [href]="gist.html_url" target="_blank">View Gist</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <small><strong>Created:</strong> {{ gist.created_at | date }}</small>
+        <small><strong>Updated:</strong> {{ gist.updated_at | date }}</small>
+        <div *ngFor="let file of (gist.files | keyvalue)">
+            <p><strong>{{ file.value.filename }}</strong></p>
+            <p><strong>Language:</strong> {{ file.value.language || 'Unknown' }}</p>
+        </div>
+    </div>
+</div>

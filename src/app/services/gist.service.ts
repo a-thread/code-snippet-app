@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AccessToken } from '../models/access-token';
+import { Gist } from '../models/gists';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +13,11 @@ export class GistService {
 
   constructor(private http: HttpClient) { }
 
-  getGists(token: string): Observable<any> {
+  getGists(token: string): Observable<Gist[]> {
     const headers = new HttpHeaders({
       Authorization: `token ${token}`
     });
-    return this.http.get(`${this.baseUrl}`, { headers });
+    return this.http.get<Gist[]>(`${this.baseUrl}`, { headers });
   }
 
   createGist(code: string, notes: string, language: string, token: string): Observable<any> {

@@ -3,8 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { AppStore } from '../../app.component.store';
-import { Snippet } from '../../models/snippet';
 import { SnippetContainerStore } from './snippet-container.store';
+import { Gist } from '../../models/gists';
+import { GistCardComponent } from "./gist-card/gist-card.component";
+import { AddSnippetComponent } from "./add-snippet/add-snippet.component";
 
 @Component({
   selector: 'app-snippet-container',
@@ -12,6 +14,8 @@ import { SnippetContainerStore } from './snippet-container.store';
   imports: [
     CommonModule,
     FormsModule,
+    GistCardComponent,
+    AddSnippetComponent
   ],
   providers: [
     SnippetContainerStore,
@@ -21,29 +25,19 @@ import { SnippetContainerStore } from './snippet-container.store';
 })
 export class SnippetContainerComponent implements OnInit {
 
-  newCode = '';
-  newNotes = '';
-  newLanguage = '';
-
-  snippets$: Observable<Snippet[]>;
+  gists$: Observable<Gist[]>;
 
   constructor(
     private snippetStore: SnippetContainerStore,
     private appStore: AppStore,
   ) {
-    this.snippets$ = this.snippetStore.snippets$;
+    this.gists$ = this.snippetStore.gists$;
   }
 
   ngOnInit(): void {
     this.snippetStore.loadSnippets(this.appStore.githubToken$);
   }
 
-  saveSnippet(): void {
-    console.log(this.newCode, this.newNotes, this.newLanguage);
-    this.snippetStore.saveSnippet({ code: this.newCode, notes: this.newNotes, language: this.newLanguage });
-    this.newCode = '';
-    this.newNotes = '';
-    this.newLanguage = '';
-  }
+
 }
 
