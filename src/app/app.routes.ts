@@ -7,6 +7,6 @@ export const routes: Routes = [
   { path: 'callback', component: AuthCallbackComponent },
   { path: 'snippets', component: SnippetContainerComponent },
   { path: 'login', component: LoginComponent },
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'snippets', pathMatch: 'full' },
   { path: '*', redirectTo: 'login' },
 ];

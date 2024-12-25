@@ -5,6 +5,7 @@ import { tap, switchMap, withLatestFrom, filter } from 'rxjs/operators';
 import { GistService } from './services/gist.service';
 import { Router } from '@angular/router';
 import { AccessToken } from './models/access-token';
+import { GithubTokenService } from './services/github-token.service';
 
 export interface AppState {
     isAuthenticated: boolean;
@@ -15,11 +16,12 @@ export interface AppState {
 export class AppStore extends ComponentStore<AppState> {
     constructor(
         private gistService: GistService,
+        private githubTokenService: GithubTokenService,
         private router: Router,
     ) {
         super({
-            isAuthenticated: !!sessionStorage.getItem('githubToken'),
-            githubToken: sessionStorage.getItem('githubToken'),
+            isAuthenticated: !!githubTokenService.getGithubToken(),
+            githubToken: githubTokenService.getGithubToken(),
         });
     }
 
@@ -28,9 +30,9 @@ export class AppStore extends ComponentStore<AppState> {
 
     readonly setAuthentication = this.updater((state, githubToken: string | null) => {
         if (githubToken) {
-            sessionStorage.setItem('githubToken', githubToken);
+            this.githubTokenService.setGithubToken(githubToken);
         } else {
-            sessionStorage.removeItem('githubToken');
+            this.githubTokenService.removeGithubToken();
         }
         return {
             ...state,
@@ -47,10 +49,10 @@ export class AppStore extends ComponentStore<AppState> {
         )
     );
 
-    readonly handleAuthentication = this.effect(() => {
-        return this.isAuthenticated$.pipe(
-            withLatestFrom(this.githubToken$),
-            filter(([isAuthenticated, githubToken]) => isAuthenticated && githubToken !== null),
+    readonly handleAuthentication = this.effect<void>((trigger$) => {
+        return trigger$.pipe(
+            withLatestFrom(this.state$),
+            filter(([trigger, state]) => state.isAuthenticated && state.githubToken !== null),
             tap(() => this.router.navigate(['/snippets']))
         );
     });
