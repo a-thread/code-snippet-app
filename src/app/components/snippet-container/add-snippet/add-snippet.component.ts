@@ -3,13 +3,12 @@ import { SnippetContainerStore } from '../snippet-container.store';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-add-snippet',
-  standalone: true,
-  imports: [
-    FormsModule
-  ],
-  templateUrl: './add-snippet.component.html',
-  styleUrl: './add-snippet.component.scss'
+    selector: 'app-add-snippet',
+    imports: [
+        FormsModule
+    ],
+    templateUrl: './add-snippet.component.html',
+    styleUrl: './add-snippet.component.scss'
 })
 export class AddSnippetComponent {
   newCode = '';

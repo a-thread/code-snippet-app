@@ -5,10 +5,9 @@ import { AppStore } from '../../app.component.store';
 import { of } from 'rxjs';
 
 @Component({
-  selector: 'app-auth-callback',
-  standalone: true,
-  imports: [CommonModule],
-  template: `<p>Authenticating...</p>`,
+    selector: 'app-auth-callback',
+    imports: [CommonModule],
+    template: `<p>Authenticating...</p>`
 })
 export class AuthCallbackComponent implements OnInit {
   constructor(

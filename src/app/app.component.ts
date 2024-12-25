@@ -5,16 +5,15 @@ import { GistService } from './services/gist.service';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  template: `<router-outlet></router-outlet>`,
-  imports: [
-    RouterOutlet,
-  ],
-  providers: [
-    AppStore,
-    OAuthService,
-    GistService
-  ]
+    selector: 'app-root',
+    template: `<router-outlet></router-outlet>`,
+    imports: [
+        RouterOutlet,
+    ],
+    providers: [
+        AppStore,
+        OAuthService,
+        GistService
+    ]
 })
 export class AppComponent { }

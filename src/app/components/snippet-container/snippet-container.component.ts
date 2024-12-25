@@ -9,19 +9,18 @@ import { GistCardComponent } from "./gist-card/gist-card.component";
 import { AddSnippetComponent } from "./add-snippet/add-snippet.component";
 
 @Component({
-  selector: 'app-snippet-container',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    GistCardComponent,
-    AddSnippetComponent
-  ],
-  providers: [
-    SnippetContainerStore,
-  ],
-  templateUrl: './snippet-container.component.html',
-  styleUrl: './snippet-container.component.scss'
+    selector: 'app-snippet-container',
+    imports: [
+        CommonModule,
+        FormsModule,
+        GistCardComponent,
+        AddSnippetComponent
+    ],
+    providers: [
+        SnippetContainerStore,
+    ],
+    templateUrl: './snippet-container.component.html',
+    styleUrl: './snippet-container.component.scss'
 })
 export class SnippetContainerComponent implements OnInit {
 
