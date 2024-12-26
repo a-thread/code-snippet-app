@@ -22,4 +22,6 @@ export interface Gist {
     public: boolean;
     files: { [key: string]: GistFile };
     owner: GistOwner;
+
+    isSelected?: boolean;
 }

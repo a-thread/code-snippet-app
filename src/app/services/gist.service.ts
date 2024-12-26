@@ -13,17 +13,11 @@ export class GistService {
 
   constructor(private http: HttpClient) { }
 
-  getGists(token: string): Observable<Gist[]> {
-    const headers = new HttpHeaders({
-      Authorization: `token ${token}`
-    });
-    return this.http.get<Gist[]>(`${this.baseUrl}`, { headers });
+  getGists(): Observable<Gist[]> {
+    return this.http.get<Gist[]>(`${this.baseUrl}`);
   }
 
-  createGist(code: string, notes: string, language: string, token: string): Observable<any> {
-    const headers = new HttpHeaders({
-      Authorization: `token ${token}`
-    });
+  createGist(code: string, notes: string, language: string): Observable<any> {
     const gistData = {
       description: 'Code snippet with notes',
       public: false,
@@ -32,7 +26,11 @@ export class GistService {
         'notes.txt': { content: notes }
       }
     };
-    return this.http.post(this.baseUrl, gistData, { headers });
+    return this.http.post(this.baseUrl, gistData);
+  }
+
+  deleteGist(id: string): Observable<any> {
+    return this.http.delete(this.baseUrl + id);
   }
 
   getAccessToken(authCode: string): Observable<AccessToken> {

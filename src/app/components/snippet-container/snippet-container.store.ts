@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { Snippet } from '../../models/snippet';
-import { GistService } from '../../services/gist.service';
-import { Observable, switchMap, tap, withLatestFrom } from 'rxjs';
+import { Observable, switchMap, tap } from 'rxjs';
 import { Gist } from '../../models/gists';
+import { GistService } from '../../services/gist.service';
+import { GistTableVm } from './gist-table/gist-table-vm';
 
 export interface SnippetContainerState {
     gists: Gist[];
-    selectedGist: Gist | null;
-    githubToken: string | null;
+    sortColumn: keyof Gist | null;
+    sortOrder: 'asc' | 'desc';
 }
 
 @Injectable()
@@ -19,35 +19,65 @@ export class SnippetContainerStore extends ComponentStore<SnippetContainerState>
     ) {
         super({
             gists: [],
-            selectedGist: null,
-            githubToken: null,
+            sortColumn: null,
+            sortOrder: 'asc',
         });
+
+        this.loadSnippets();
     }
 
-    readonly gists$ = this.select(state => state.gists);
-    readonly selectedGist$ = this.select(state => state.selectedGist);
-    readonly githubToken$ = this.select(state => state.githubToken);
+    readonly sortedGists$ = this.select(({ gists, sortColumn, sortOrder }) => {
+        if (!sortColumn) return gists;
+
+        return [...gists].sort((a, b) => {
+            const valueA = a[sortColumn] || '';
+            const valueB = b[sortColumn] || '';
+
+            if (valueA < valueB) return sortOrder === 'asc' ? -1 : 1;
+            if (valueA > valueB) return sortOrder === 'asc' ? 1 : -1;
+            return 0;
+        });
+    });
+
+    viewModel$ = this.select(this.sortedGists$, this.state$, (gists, state): GistTableVm => ({ ...state, sortedGists: gists }));
 
     readonly setSnippets = this.updater((state, gists: Gist[]) => ({
         ...state,
         gists
     }));
 
-    readonly setToken = this.updater((state, token: string) => ({
-        ...state,
-        githubToken: token,
-    }));
+    readonly toggleAll = this.updater((state, event: Event) => {
+        const isChecked = (event.target as HTMLInputElement).checked;
+        return {
+            ...state,
+            gists: state.gists.map((gist) => ({ ...gist, selected: isChecked })),
+        };
+    });
 
-    readonly loadSnippets = this.effect((githubToken$: Observable<string | null>) =>
-        githubToken$.pipe(
-            switchMap((githubToken) => {
-                console.log(githubToken)
-                if (!githubToken) {
-                    return [];
-                }
-                return this.gistService.getGists(githubToken).pipe(
+    readonly sort = this.updater((state, column: keyof Gist) => {
+        const isSameColumn = state.sortColumn === column;
+        return {
+            ...state,
+            sortColumn: column,
+            sortOrder: isSameColumn ? (state.sortOrder === 'asc' ? 'desc' : 'asc') : 'asc',
+        };
+    });
+
+    readonly loadSnippets = this.effect<void>(trigger$ =>
+        trigger$.pipe(
+            switchMap(() => {
+                return this.gistService.getGists().pipe(
                     tap((gists) => this.setSnippets(gists)),
-                    tap(() => this.setToken(githubToken))
+                );
+            })
+        )
+    );
+
+    readonly deleteGist = this.effect<string>((id$) =>
+        id$.pipe(
+            switchMap(([id]) => {
+                return this.gistService.deleteGist(id).pipe(
+                    tap(() => this.setSnippets(this.get().gists.filter(gist => gist.id !== id)))
                 );
             })
         )
@@ -55,12 +85,8 @@ export class SnippetContainerStore extends ComponentStore<SnippetContainerState>
 
     readonly saveSnippet = this.effect((snippet$: Observable<{ code: string, notes: string, language: string }>) =>
         snippet$.pipe(
-            withLatestFrom(this.githubToken$),
-            switchMap(([{ code, notes, language }, token]) => {
-                if (!token) {
-                    throw new Error('Not authenticated');
-                }
-                return this.gistService.createGist(code, notes, language, token).pipe(
+            switchMap(({ code, notes, language }) => {
+                return this.gistService.createGist(code, notes, language).pipe(
                     tap((newSnippet) => this.setSnippets([...this.get().gists, newSnippet]))
                 );
             })

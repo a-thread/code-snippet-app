@@ -1,0 +1,38 @@
+<table *ngIf="viewModel$ | async as vm" [border]="1" style="width: 100%; text-align: left;">
+    <thead>
+        <tr>
+            <th>
+                <input type="checkbox" (change)="toggleAll($event)" />
+            </th>
+            <th (click)="sort('description')" style="cursor: pointer;">
+                Description
+                <span *ngIf="vm?.sortColumn === 'description'">
+                    {{ vm?.sortOrder === 'asc' ? '▲' : '▼' }}
+                </span>
+            </th>
+            <!-- <th (click)="sort('language')" style="cursor: pointer;">
+                Language
+                <span *ngIf="vm?.sortColumn === 'language'">
+                    {{ vm?.sortOrder === 'asc' ? '▲' : '▼' }}
+                </span>
+            </th> -->
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let gist of vm.sortedGists">
+            <td>
+                <input type="checkbox" [(ngModel)]="gist.isSelected" />
+            </td>
+            <td>
+                <a [routerLink]="['/detail', gist.id]">{{ gist.description }}</a>
+            </td>
+            <!-- <td>{{ gist.language }}</td> -->
+            <td>
+                <button (click)="deleteGist(gist.id)" style="background: none; border: none;">
+                    🗑️
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>

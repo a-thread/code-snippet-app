@@ -2,7 +2,6 @@
     <h2>Gists</h2>
     <app-add-snippet></app-add-snippet>
     <div class="gists-container">
-        <app-gist-card *ngFor="let gist of gists$ | async" [gist]="gist">
-        </app-gist-card>
+        <app-gist-table></app-gist-table>
     </div>
 </div>

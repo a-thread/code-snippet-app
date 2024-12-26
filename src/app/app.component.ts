@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
-import { AppStore } from './app.component.store'; // Import the AppStore
-import { OAuthService } from './services/oauth-service.service';
-import { GistService } from './services/gist.service';
 import { RouterOutlet } from '@angular/router';
+import { AppStore } from './app.component.store';
 
 @Component({
     selector: 'app-root',
@@ -12,8 +10,6 @@ import { RouterOutlet } from '@angular/router';
     ],
     providers: [
         AppStore,
-        OAuthService,
-        GistService
     ]
 })
 export class AppComponent { }
