@@ -1,0 +1,32 @@
+<div class="gist-detail">
+    <form [formGroup]="gistForm" (ngSubmit)="onSubmit()">
+        <div class="form-group actions">
+            <button type="button" class="btn btn-secondary" (click)="onAddFileClick()">Add File</button>
+
+            <div class="button-group">
+                <button type="button" class="btn btn-secondary" (click)="navigateToSnippets()">Back</button>
+                <button type="submit" class="btn btn-success">Save</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input id="name" type="text" formControlName="name" placeholder="Gist Name" class="form-control" />
+        </div>
+        <div formArrayName="files" *ngFor="let file of fileForms.controls; let i = index">
+            <div [formGroupName]="i" class="file-group">
+                <div class="form-group">
+                    <label for="file-name-{{ i }}">File Name</label>
+                    <input id="file-name-{{ i }}" type="text" formControlName="fileName" placeholder="File Name"
+                        class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="file-content-{{ i }}">Content</label>
+                    <textarea appSyntaxHighlight id="file-content-{{ i }}" formControlName="content" rows="10"
+                        placeholder="Enter file content here"
+                        [fileExtension]="file.get('fileName')?.value.split('.').pop()" class="form-control">
+                    </textarea>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

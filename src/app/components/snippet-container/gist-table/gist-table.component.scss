@@ -1,0 +1,129 @@
+.gist-table {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  border-collapse: collapse;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #2d2d2d;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  }
+
+  thead {
+    background-color: #007bff;
+    color: #fff;
+
+    @media (prefers-color-scheme: dark) {
+      background-color: #0056b3;
+    }
+
+    th {
+      padding: 1rem;
+      text-align: left;
+      font-size: 1rem;
+
+      &:first-child {
+        width: 5%;
+        text-align: center;
+      }
+
+      &:last-child {
+        width: 5%;
+        text-align: center;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      &:nth-child(even) {
+        background-color: #f9f9f9;
+
+        @media (prefers-color-scheme: dark) {
+          background-color: #3b3b3b;
+        }
+      }
+
+      &:hover {
+        background-color: #f1f1f1;
+
+        @media (prefers-color-scheme: dark) {
+          background-color: #444;
+        }
+      }
+
+      td {
+        padding: 1rem;
+        text-align: left;
+
+        &:first-child {
+          text-align: center;
+        }
+
+        &:last-child {
+          text-align: center;
+        }
+
+        a {
+          color: #007bff;
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+
+          @media (prefers-color-scheme: dark) {
+            color: #80bfff;
+          }
+        }
+
+        button {
+          background: none;
+          border: none;
+          color: #ff4d4d;
+          font-size: 1.2rem;
+          cursor: pointer;
+
+          &:hover {
+            color: #ff0000;
+          }
+
+          @media (prefers-color-scheme: dark) {
+            color: #ff6f6f;
+
+            &:hover {
+              color: #ff4d4d;
+            }
+          }
+        }
+
+        input[type="checkbox"] {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  form {
+    flex-direction: column;
+
+    input[type="text"] {
+      width: 100%;
+      margin: 0.5rem 0;
+    }
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .gist-table {
+    font-size: 0.9rem;
+  }
+}

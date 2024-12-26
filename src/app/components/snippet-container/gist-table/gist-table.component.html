@@ -1,4 +1,4 @@
-<table *ngIf="viewModel$ | async as vm" [border]="1" style="width: 100%; text-align: left;">
+<table *ngIf="viewModel$ | async as vm" class="gist-table">
     <thead>
         <tr>
             <th>
@@ -6,8 +6,8 @@
             </th>
             <th (click)="sort('description')" style="cursor: pointer;">
                 Description
-                <span *ngIf="vm?.sortColumn === 'description'">
-                    {{ vm?.sortOrder === 'asc' ? '▲' : '▼' }}
+                <span>
+                    {{ vm?.sortColumn | sortColumnIcon:'description':vm?.sortOrder }}
                 </span>
             </th>
             <!-- <th (click)="sort('language')" style="cursor: pointer;">
@@ -25,7 +25,7 @@
                 <input type="checkbox" [(ngModel)]="gist.isSelected" />
             </td>
             <td>
-                <a [routerLink]="['/detail', gist.id]">{{ gist.description }}</a>
+                <a [routerLink]="['/snippets', gist.id]">{{ gist.description }}</a>
             </td>
             <!-- <td>{{ gist.language }}</td> -->
             <td>

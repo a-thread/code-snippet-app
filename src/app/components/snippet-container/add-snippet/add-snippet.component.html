@@ -1,5 +1,7 @@
 <h3>Add a new snippet</h3>
-<input [(ngModel)]="newCode" placeholder="Code" />
-<input [(ngModel)]="newNotes" placeholder="Notes" />
-<input [(ngModel)]="newLanguage" placeholder="Language" />
-<button (click)="saveSnippet()">Save Snippet</button>
+<form [formGroup]="snippetForm" (ngSubmit)="onSubmit()">
+    <input type="text" formControlName="name" placeholder="Name" />
+    <input type="text" formControlName="code" placeholder="Code" />
+    <input type="text" formControlName="language" placeholder="Language" />
+    <button type="submit">Save Snippet</button>
+</form>

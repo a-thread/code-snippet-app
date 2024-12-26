@@ -1,4 +1,23 @@
-export interface GistFile {
+interface GistOwner {
+    login: string;
+    id: number;
+    avatar_url: string;
+    html_url: string;
+}
+
+export interface BaseGist {
+    id: string;
+    html_url: string;
+    description: string;
+    created_at: string;
+    updated_at: string;
+    public: boolean;
+    owner: GistOwner;
+
+    isSelected?: boolean;
+}
+
+export interface GistListFile {
     filename: string;
     type: string;
     language: string | null;
@@ -6,22 +25,10 @@ export interface GistFile {
     size: number;
 }
 
-export interface GistOwner {
-    login: string;
-    id: number;
-    avatar_url: string;
-    html_url: string;
-}
 
-export interface Gist {
-    id: string;
-    html_url: string;
-    description: string;
-    created_at: string;
-    updated_at: string;
-    public: boolean;
-    files: { [key: string]: GistFile };
-    owner: GistOwner;
+
+export interface GistList extends BaseGist {
+    files: { [key: string]: GistListFile };
 
     isSelected?: boolean;
 }

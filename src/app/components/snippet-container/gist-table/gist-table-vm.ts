@@ -1,7 +1,7 @@
-import { Gist } from "../../../models/gists";
+import { GistList } from "../../../models/gists";
 
 export interface GistTableVm {
-    sortedGists: Gist[];
-    sortColumn: keyof Gist | null;
+    sortedGists: GistList[];
+    sortColumn: keyof GistList | null;
     sortOrder: 'asc' | 'desc';
 }

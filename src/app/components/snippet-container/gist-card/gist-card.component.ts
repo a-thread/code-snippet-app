@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, input } from '@angular/core';
-import { Gist } from '../../../models/gists';
+import { GistList } from '../../../models/gists';
 
 @Component({
   selector: 'app-gist-card',
@@ -12,6 +12,6 @@ import { Gist } from '../../../models/gists';
 })
 export class GistCardComponent {
 
-  @Input() gist: Gist | undefined = undefined;
+  @Input() gist: GistList | undefined = undefined;
 
 }

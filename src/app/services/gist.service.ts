@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AccessToken } from '../models/access-token';
-import { Gist } from '../models/gists';
+import { GistList } from '../models/gists';
 
 @Injectable({
   providedIn: 'root'
@@ -13,17 +13,16 @@ export class GistService {
 
   constructor(private http: HttpClient) { }
 
-  getGists(): Observable<Gist[]> {
-    return this.http.get<Gist[]>(`${this.baseUrl}`);
+  getList(): Observable<GistList[]> {
+    return this.http.get<GistList[]>(`${this.baseUrl}`);
   }
 
-  createGist(code: string, notes: string, language: string): Observable<any> {
+  createGist(code: string, name: string, language: string): Observable<any> {
     const gistData = {
-      description: 'Code snippet with notes',
+      description: name,
       public: false,
       files: {
         [`snippet.${language}`]: { content: code },
-        'notes.txt': { content: notes }
       }
     };
     return this.http.post(this.baseUrl, gistData);
