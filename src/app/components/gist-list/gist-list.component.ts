@@ -20,7 +20,7 @@ export class GistListComponent {
   router = inject(Router);
 
   addNewClicked(): void {
-    this.router.navigate(['snippets', 'new']);
+    this.router.navigate(['new']);
   }
 
 }
