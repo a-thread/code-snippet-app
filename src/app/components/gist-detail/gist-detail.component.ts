@@ -58,7 +58,7 @@ export class GistDetailComponent implements OnDestroy {
   }
 
   navigateToSnippets(): void {
-    this.router.navigate(['/snippets']);
+    this.router.navigate(['']);
   }
 
   onSubmit(): void {

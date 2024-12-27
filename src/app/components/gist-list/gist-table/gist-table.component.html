@@ -13,7 +13,7 @@
     <tbody>
         <tr *ngFor="let gist of vm.sortedGists">
             <td>
-                <a [routerLink]="['/snippets', gist.id]">{{ gist.description }}</a>
+                <a [routerLink]="['', gist.id]">{{ gist.description }}</a>
             </td>
             <td>
                 <button (click)="deleteGist(gist.id)">

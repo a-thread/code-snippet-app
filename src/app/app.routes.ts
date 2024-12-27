@@ -6,16 +6,15 @@ import { authGuard } from './authentication/auth.guard';
 import { GistDetailComponent } from './components/gist-detail/gist-detail.component';
 
 export const routes: Routes = [
+  { path: 'login', component: LoginComponent },
   { path: 'callback', component: AuthCallbackComponent },
   {
-    path: 'snippets', component: GistListComponent, canActivate: [authGuard], pathMatch: 'full'
+    path: '', component: GistListComponent, canActivate: [authGuard], pathMatch: 'full'
   },
   {
-    path: 'snippets/:id',
+    path: ':id',
     component: GistDetailComponent,
     canActivate: [authGuard]
   },
-  { path: 'login', component: LoginComponent },
-  { path: '', redirectTo: 'snippets', pathMatch: 'full' },
   { path: '**', redirectTo: 'login' },
 ];

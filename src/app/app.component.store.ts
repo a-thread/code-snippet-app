@@ -29,7 +29,7 @@ export class AppStore extends ComponentStore<{}> {
                     this.authTokenService.removeAuthToken();
                 }
             }),
-            tap(() => this.router.navigate(['/snippets'])),
+            tap(() => this.router.navigate([''])),
         )
     );
 
@@ -37,7 +37,7 @@ export class AppStore extends ComponentStore<{}> {
         return trigger$.pipe(
             tap(() => {
                 if (this.authTokenService.isAuthenticated()) {
-                    this.router.navigate(['/snippets']);
+                    this.router.navigate(['']);
                 } else {
                     this.oauthService.loginWithGitHub();
                 }

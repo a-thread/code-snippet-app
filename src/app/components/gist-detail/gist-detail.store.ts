@@ -112,7 +112,7 @@ export class GistDetailStore extends ComponentStore<GistDetailState> {
                 this.gistService.updateGist(dto).pipe(
                     tap({
                         next: (gist) => {
-                            this.router.navigate(['/snippets']);
+                            this.router.navigate(['']);
                             this.toastService.showToast('Gist updated successfully!');
                         },
                         error: (error) => {
@@ -140,7 +140,7 @@ export class GistDetailStore extends ComponentStore<GistDetailState> {
                 return this.gistService.createGist(dto).pipe(
                     tap({
                         next: (gist) => {
-                            this.router.navigate(['/snippets']);
+                            this.router.navigate(['']);
                             this.toastService.showToast('Gist created successfully!');
                         },
                         error: (error) => {
