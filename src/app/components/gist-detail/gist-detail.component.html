@@ -21,9 +21,8 @@
                 </div>
                 <div class="form-group">
                     <label for="file-content-{{ i }}">Content</label>
-                    <textarea appSyntaxHighlight id="file-content-{{ i }}" formControlName="content" rows="10"
-                        placeholder="Enter file content here"
-                        [fileExtension]="file.get('fileName')?.value.split('.').pop()" class="form-control">
+                    <textarea id="file-content-{{ i }}" formControlName="content" rows="10"
+                        placeholder="Enter file content here" class="form-control">
                     </textarea>
                 </div>
             </div>

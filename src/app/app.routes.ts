@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthCallbackComponent } from './components/auth-callback/auth-callback.component';
-import { SnippetContainerComponent } from './components/snippet-container/snippet-container.component';
+import { GistListComponent } from './components/gist-list/gist-list.component';
 import { LoginComponent } from './components/login/login.component';
 import { authGuard } from './authentication/auth.guard';
 import { GistDetailComponent } from './components/gist-detail/gist-detail.component';
@@ -8,7 +8,7 @@ import { GistDetailComponent } from './components/gist-detail/gist-detail.compon
 export const routes: Routes = [
   { path: 'callback', component: AuthCallbackComponent },
   {
-    path: 'snippets', component: SnippetContainerComponent, canActivate: [authGuard], pathMatch: 'full'
+    path: 'snippets', component: GistListComponent, canActivate: [authGuard], pathMatch: 'full'
   },
   {
     path: 'snippets/:id',

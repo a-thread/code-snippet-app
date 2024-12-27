@@ -1,12 +1,14 @@
 import { inject, Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { SnippetContainerStore } from '../snippet-container.store';
 import { GistList } from '../../../models/gists';
 import { GistTableVm } from './gist-table-vm';
 import { switchMap, tap } from 'rxjs';
 import { GistService } from '../../../services/gist.service';
+import { ToastService } from '../../../services/toast.service';
+import { ToastType } from '../../../models/toast-message';
 
 export interface GistTableState {
+    gists: GistList[];
     sortColumn: keyof GistList | null;
     sortOrder: 'asc' | 'desc';
 }
@@ -14,20 +16,24 @@ export interface GistTableState {
 @Injectable()
 export class GistTableStore extends ComponentStore<GistTableState> {
 
-    snippetContainerStore = inject(SnippetContainerStore);
+    gistService = inject(GistService);
+    toastService = inject(ToastService);
 
-    constructor(
-        private gistService: GistService,
-
-    ) {
+    constructor() {
         super({
+            gists: [],
             sortColumn: null,
             sortOrder: 'asc',
         });
+
+        this.loadSnippets();
     }
 
+    readonly gists$ = this.select((state) => state.gists);
+
+
     readonly sortedGists$ = this.select(
-        this.snippetContainerStore.gists$,
+        this.gists$,
         this.state$,
         (gists, { sortColumn, sortOrder }) => {
             if (!sortColumn) return gists;
@@ -45,6 +51,17 @@ export class GistTableStore extends ComponentStore<GistTableState> {
     viewModel$ = this.select(this.sortedGists$, this.state$, (gists, state): GistTableVm => ({ ...state, sortedGists: gists }));
 
 
+    readonly setSnippets = this.updater((state, gists: GistList[]) => ({
+        ...state,
+        gists
+    }));
+
+    readonly toggleAll = this.updater((state, isChecked: boolean) => {
+        return {
+            ...state,
+            gists: state.gists.map((gist) => ({ ...gist, selected: isChecked })),
+        };
+    });
     readonly sort = this.updater((state, column: keyof GistList) => {
         const isSameColumn = state.sortColumn === column;
         return {
@@ -54,14 +71,29 @@ export class GistTableStore extends ComponentStore<GistTableState> {
         };
     });
 
-    readonly deleteGist = this.effect<string>((id$) =>
-        id$.pipe(
-            switchMap(([id]) => this.gistService.deleteGist(id).pipe(
-                tap(() => this.snippetContainerStore.loadSnippets())
-            ))
+    readonly loadSnippets = this.effect<void>(trigger$ =>
+        trigger$.pipe(
+            switchMap(() => {
+                return this.gistService.getList().pipe(
+                    tap((gists) => this.setSnippets(gists)),
+                );
+            })
         )
     );
 
-    readonly toggleAll = (isChecked: boolean) => this.snippetContainerStore.toggleAll(isChecked);
-
+    readonly deleteGist = this.effect<string>((id$) =>
+        id$.pipe(
+            switchMap((id) => this.gistService.deleteGist(id).pipe(
+                tap({
+                    next: () => {
+                        this.setSnippets(this.get().gists.filter((gist) => gist.id !== id));
+                        this.toastService.showToast('Gist deleted successfully!');
+                    },
+                    error: (error) => {
+                        this.toastService.showToast('Failed to delete gist', ToastType.Error);
+                    },
+                })
+            ))
+        )
+    );
 }

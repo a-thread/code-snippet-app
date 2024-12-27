@@ -29,6 +29,7 @@ export class GistTableComponent {
   }
 
   deleteGist(id: string) {
+    console.log('Deleting gist with id:', id);
     this.store.deleteGist(id);
   }
 

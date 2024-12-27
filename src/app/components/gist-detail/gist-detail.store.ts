@@ -1,11 +1,13 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { ActivatedRoute } from '@angular/router';
-import { GistDetail } from './models/gist-detail';
-import { switchMap, tap } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GistDetail } from '../../models/gist-detail';
+import { map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { GistDetailService } from './service/gist-detail.service';
-import { FileSlim } from './models/file-slim';
+import { FileSlim } from '../../models/file-slim';
 import { ToastService } from '../../services/toast.service';
+import { ToastType } from '../../models/toast-message';
+import { GistDto } from '../../models/gist-dto';
 
 interface GistDetailState {
     gist: GistDetail | null;
@@ -15,7 +17,13 @@ interface GistDetailState {
 
 @Injectable()
 export class GistDetailStore extends ComponentStore<GistDetailState> {
-    constructor(private gistService: GistDetailService, private route: ActivatedRoute, private toastService: ToastService) {
+
+    gistService = inject(GistDetailService);
+    route = inject(ActivatedRoute);
+    router = inject(Router);
+    toastService = inject(ToastService);
+
+    constructor() {
         super({ gist: null, loading: false, error: null });
 
         this.loadGistDetail();
@@ -24,6 +32,20 @@ export class GistDetailStore extends ComponentStore<GistDetailState> {
     readonly gist$ = this.select((state) => state.gist);
     readonly loading$ = this.select((state) => state.loading);
     readonly error$ = this.select((state) => state.error);
+    readonly shouldCreateNew$ = this.select(this.route.paramMap, (params) => params.get('id') === 'new');
+
+    readonly viewModel$ = this.select(
+        this.gist$,
+        this.loading$,
+        this.error$,
+        this.shouldCreateNew$,
+        (gist, loading, error, shouldCreateNew) => ({
+            gist,
+            loading,
+            error,
+            shouldCreateNew
+        })
+    );
 
     readonly loadGistDetail = this.effect<void>((trigger$) =>
         trigger$.pipe(
@@ -34,6 +56,15 @@ export class GistDetailStore extends ComponentStore<GistDetailState> {
                         const id = params.get('id');
                         if (!id) {
                             throw new Error('No gist ID found in route');
+                        }
+                        if (id === 'new') {
+                            return [{
+                                id: '',
+                                description: '',
+                                files: {
+                                    '': { content: '' }
+                                },
+                            } as unknown as GistDetail];
                         }
                         return this.gistService.getGistById(id);
                     }),
@@ -46,13 +77,25 @@ export class GistDetailStore extends ComponentStore<GistDetailState> {
         )
     );
 
+    readonly submitClicked = this.effect<{ description: string, files: FileSlim[] }>((dto$) =>
+        dto$.pipe(
+            withLatestFrom(this.shouldCreateNew$),
+            tap(([dto, shouldCreateNew]) => {
+                if (shouldCreateNew) {
+                    this.createGist(dto);
+                } else {
+                    this.updateGist(dto);
+                }
+            })
+        )
+    );
+
     readonly updateGist = this.effect<{ description: string, files: FileSlim[] }>((trigger$) =>
         trigger$.pipe(
             tap(() => this.patchState({ loading: true, error: null })),
-
-            switchMap(({ description, files }) => {
-                const gist = this.get().gist
-                const updatedGist = {
+            map(({ description, files }): GistDto => {
+                const gist = this.get().gist;
+                return {
                     ...gist,
                     id: gist?.id || '',
                     description,
@@ -63,22 +106,50 @@ export class GistDetailStore extends ComponentStore<GistDetailState> {
                             return acc;
                         }, {} as Record<string, { content: string }>)
                     }
-                }
-
-                return this.gistService.updateGist(updatedGist).pipe(
+                };
+            }),
+            switchMap((dto) =>
+                this.gistService.updateGist(dto).pipe(
                     tap({
                         next: (gist) => {
-                            this.patchState({ gist, loading: false });
-                            this.toastService.showToast('Gist updated successfully!', 'success');
+                            this.router.navigate(['/snippets']);
+                            this.toastService.showToast('Gist updated successfully!');
                         },
                         error: (error) => {
                             this.patchState({ error: error.message, loading: false });
-                            this.toastService.showToast('Failed to update gist', 'error');
+                            this.toastService.showToast('Failed to update gist', ToastType.Error);
                         },
                     })
                 )
-            }
             )
+        )
+    );
+
+    readonly createGist = this.effect<{ description: string, files: FileSlim[] }>((dto$) =>
+        dto$.pipe(
+            map(({ description, files }): GistDto => ({
+                description,
+                files: {
+                    ...files.reduce((acc, file) => {
+                        acc[file.fileName] = { content: file.content };
+                        return acc;
+                    }, {} as Record<string, { content: string }>)
+                }
+            })),
+            switchMap((dto) => {
+                return this.gistService.createGist(dto).pipe(
+                    tap({
+                        next: (gist) => {
+                            this.router.navigate(['/snippets']);
+                            this.toastService.showToast('Gist created successfully!');
+                        },
+                        error: (error) => {
+                            this.patchState({ error: error.message, loading: false });
+                            this.toastService.showToast('Failed to create gist', ToastType.Error);
+                        },
+                    })
+                );
+            })
         )
     );
 }

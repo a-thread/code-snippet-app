@@ -1,0 +1,25 @@
+<table *ngIf="viewModel$ | async as vm" class="gist-table">
+    <thead>
+        <tr>
+            <th class="sortable" (click)="sort('description')">
+                Description
+                <span>
+                    {{ vm?.sortColumn | sortColumnIcon:'description':vm?.sortOrder }}
+                </span>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let gist of vm.sortedGists">
+            <td>
+                <a [routerLink]="['/snippets', gist.id]">{{ gist.description }}</a>
+            </td>
+            <td>
+                <button (click)="deleteGist(gist.id)">
+                    🗑️
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>

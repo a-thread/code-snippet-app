@@ -1,32 +1,32 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GistDetailStore } from './gist-detail.store';
-import { FormGroup, FormControl, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
-import { Subject, take, takeUntil } from 'rxjs';
-import { GistDetail } from './models/gist-detail';
-import { SyntaxHighlightDirective } from './utils/syntax-highlight.directive';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
+import { GistDetail } from '../../models/gist-detail';
 
 @Component({
   selector: 'app-gist-detail',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SyntaxHighlightDirective],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './gist-detail.component.html',
   styleUrls: ['./gist-detail.component.scss'],
   providers: [GistDetailStore]
 })
-export class GistDetailComponent implements OnInit, OnDestroy {
+export class GistDetailComponent implements OnDestroy {
 
   gistForm = new FormGroup({
     name: new FormControl<string>('', Validators.required),
     files: new FormArray<FormGroup>([]),
-
   });
 
   destroy$ = new Subject<void>();
 
   private store = inject(GistDetailStore);
   private router = inject(Router);
+
+  readonly viewModel$ = this.store.viewModel$;
 
   get formValue() {
     return this.gistForm.value;
@@ -46,11 +46,10 @@ export class GistDetailComponent implements OnInit, OnDestroy {
     });
 
     this.store.gist$.pipe(takeUntil(this.destroy$)).subscribe((gist) => {
-      if (gist) {
+      if (gist !== null && gist !== undefined) {
         this.setFormValues(gist);
       }
     });
-
   }
 
   ngOnDestroy(): void {
@@ -64,7 +63,7 @@ export class GistDetailComponent implements OnInit, OnDestroy {
 
   onSubmit(): void {
     if (this.gistForm.valid) {
-      this.store.updateGist({
+      this.store.submitClicked({
         description: this.formValue.name || '',
         files: this.formValue.files || [],
       });

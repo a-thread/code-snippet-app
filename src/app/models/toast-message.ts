@@ -1,4 +1,11 @@
 export interface ToastMessage {
     message: string;
-    type: 'success' | 'error' | 'info' | 'warning';
+    type: ToastType;
+}
+
+export enum ToastType {
+    Success = 'success',
+    Error = 'error',
+    Info = 'info',
+    Warning = 'warning'
 }
