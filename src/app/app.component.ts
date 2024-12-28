@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AppStore } from './app.component.store';
 import { ToastComponent } from './toast/toast.component';
 
 @Component({
@@ -13,8 +12,5 @@ import { ToastComponent } from './toast/toast.component';
         RouterOutlet,
         ToastComponent,
     ],
-    providers: [
-        AppStore,
-    ]
 })
 export class AppComponent { }

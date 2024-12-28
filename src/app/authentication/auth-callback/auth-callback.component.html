@@ -1,0 +1,8 @@
+<div class="callback-container">
+    @if(isInErrorState$ | async) {
+    <h3>Authentication failed. Please try again.</h3>
+    <button class="btn" (click)="retryClicked()">Try again</button>
+    } @else {
+    <h3>Authenticating...</h3>
+    }
+</div>

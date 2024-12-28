@@ -1,27 +1,40 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AppStore } from '../../app.component.store';
-import { of } from 'rxjs';
+import { AuthCallbackStore } from './auth-callback.store';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-auth-callback',
   imports: [CommonModule],
-  template: `<p>Authenticating...</p>`
+  providers: [AuthCallbackStore],
+  templateUrl: './auth-callback.component.html',
+  styleUrls: ['./auth-callback.component.scss']
 })
-export class AuthCallbackComponent implements OnInit {
-  constructor(
-    private route: ActivatedRoute,
-    private appStore: AppStore
-  ) { }
+export class AuthCallbackComponent implements OnInit, OnDestroy {
+
+  private route = inject(ActivatedRoute);
+  private store = inject(AuthCallbackStore);
+
+  public isInErrorState$ = this.store.isInErrorState$;
+
+  private destroy$ = new Subject<void>();
 
   ngOnInit(): void {
-    // Get the authorization code from the URL query parameters
-    this.route.queryParams.subscribe(params => {
-      const code = params['code'];
-      if (code) {
-        this.appStore.authenticateUser(of(code));
-      }
+    this.route.queryParams.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(params => {
+      const authCode = params['code'];
+      this.store.authenticateUser(authCode);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  retryClicked(): void {
+    this.store.retryLogin();
   }
 }

@@ -1,23 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { AppStore } from '../../app.component.store';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LoginStore } from './login.store';
 
 @Component({
   selector: 'app-login',
   imports: [
     CommonModule,
   ],
+  providers: [LoginStore],
   template: `<p>Loading...</p>`,
 })
 export class LoginComponent implements OnInit {
 
-  constructor(
-    private appStore: AppStore,
-  ) { }
-
+  private loginStore = inject(LoginStore)
 
   ngOnInit(): void {
-    this.appStore.handleAuthentication();
+    this.loginStore.handleAuthentication();
   }
 
 }
