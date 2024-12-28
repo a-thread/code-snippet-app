@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AccessToken } from '../models/access-token';
 import { GistList } from '../models/gists';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GistService {
-  private backendUrl = 'http://localhost:3000/api/authenticate';
+  private backendUrl = `${environment.authApiUrl}/api/authenticate`;
   private baseUrl = 'https://api.github.com/gists';
 
   constructor(private http: HttpClient) { }
