@@ -39,11 +39,26 @@
     &.actions {
       display: flex;
       justify-content: space-between;
+      gap: 8px;
+
+      @media (max-width: 500px) {
+        flex-direction: column-reverse;
+        align-items: stretch;
+      }
 
       .button-group {
         display: flex;
         justify-content: flex-end;
         gap: 8px;
+
+        @media (max-width: 500px) {
+          flex-direction: column-reverse;
+          align-items: stretch;
+
+          button {
+            margin-bottom: 8px;
+          }
+        }
       }
 
       button {
