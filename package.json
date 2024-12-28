@@ -1,5 +1,5 @@
 {
-  "name": "code-snippet-app",
+  "name": "gist-app",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",

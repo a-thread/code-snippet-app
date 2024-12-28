@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "code-snippet-app": {
+    "gist-app": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/code-snippet-app/browser",
+            "outputPath": "dist/gist-app/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -72,14 +72,14 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "buildTarget": "code-snippet-app:build"
+            "buildTarget": "gist-app:build"
           },
           "configurations": {
             "production": {
-              "buildTarget": "code-snippet-app:build:production"
+              "buildTarget": "gist-app:build:production"
             },
             "development": {
-              "buildTarget": "code-snippet-app:build:development"
+              "buildTarget": "gist-app:build:development"
             }
           },
           "defaultConfiguration": "development"
