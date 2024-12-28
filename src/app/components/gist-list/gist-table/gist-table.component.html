@@ -1,21 +1,30 @@
 <table *ngIf="viewModel$ | async as vm" class="gist-table">
     <thead>
         <tr>
-            <th class="sortable" (click)="sort('description')">
+            <th class="sortable-column" (click)="sort('description')">
                 Description
                 <span>
                     {{ vm?.sortColumn | sortColumnIcon:'description':vm?.sortOrder }}
                 </span>
             </th>
-            <th></th>
+            <th class="sortable-column" (click)="sort('updated_at')">
+                Last Updated
+                <span>
+                    {{ vm?.sortColumn | sortColumnIcon:'updated_at':vm?.sortOrder }}
+                </span>
+            </th>
+            <th class="action-column"></th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let gist of vm.sortedGists">
-            <td>
+            <td class="sortable-column">
                 <a [routerLink]="['', gist.id]">{{ gist.description }}</a>
             </td>
-            <td>
+            <td class="sortable-column">
+                {{ gist.updated_at | date:'shortDate' }}
+            </td>
+            <td class="action-column">
                 <button (click)="deleteGist(gist.id)">
                     🗑️
                 </button>

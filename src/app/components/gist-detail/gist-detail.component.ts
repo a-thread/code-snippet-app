@@ -26,7 +26,7 @@ export class GistDetailComponent implements OnDestroy {
   private store = inject(GistDetailStore);
   private router = inject(Router);
 
-  readonly viewModel$ = this.store.viewModel$;
+  readonly isPublic$ = this.store.isPublic$;
 
   get formValue() {
     return this.gistForm.value;
@@ -59,6 +59,10 @@ export class GistDetailComponent implements OnDestroy {
 
   navigateToSnippets(): void {
     this.router.navigate(['']);
+  }
+
+  togglePublic(): void {
+    this.store.togglePublic();
   }
 
   onSubmit(): void {

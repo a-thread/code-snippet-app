@@ -34,18 +34,7 @@ export class GistDetailStore extends ComponentStore<GistDetailState> {
     readonly error$ = this.select((state) => state.error);
     readonly shouldCreateNew$ = this.select(this.route.paramMap, (params) => params.get('id') === 'new');
 
-    readonly viewModel$ = this.select(
-        this.gist$,
-        this.loading$,
-        this.error$,
-        this.shouldCreateNew$,
-        (gist, loading, error, shouldCreateNew) => ({
-            gist,
-            loading,
-            error,
-            shouldCreateNew
-        })
-    );
+    readonly isPublic$ = this.select(this.gist$, (gist) => gist?.public || false);
 
     readonly loadGistDetail = this.effect<void>((trigger$) =>
         trigger$.pipe(
@@ -66,7 +55,7 @@ export class GistDetailStore extends ComponentStore<GistDetailState> {
                                 },
                             } as unknown as GistDetail];
                         }
-                        return this.gistService.getGistById(id);
+                        return this.gistService.getById(id);
                     }),
                     tap({
                         next: (gist) => this.patchState({ gist, loading: false }),
@@ -109,10 +98,40 @@ export class GistDetailStore extends ComponentStore<GistDetailState> {
                 };
             }),
             switchMap((dto) =>
-                this.gistService.updateGist(dto).pipe(
+                this.gistService.update(dto).pipe(
                     tap({
                         next: (gist) => {
                             this.router.navigate(['']);
+                            this.toastService.showToast('Gist updated successfully!');
+                        },
+                        error: (error) => {
+                            this.patchState({ error: error.message, loading: false });
+                            this.toastService.showToast('Failed to update gist', ToastType.Error);
+                        },
+                    })
+                )
+            )
+        )
+    );
+
+    readonly togglePublic = this.effect<void>((trigger$) =>
+        trigger$.pipe(
+            tap(() => this.patchState({ loading: true, error: null })),
+            map((): GistDto => {
+                const gist = this.get().gist;
+                console.log(gist);
+                return {
+                    public: !gist?.public,
+                    description: gist?.description || '',
+                    files: gist?.files || {}
+                };
+            }),
+            switchMap((dto) =>
+                this.gistService.create(dto).pipe(
+                    tap({
+                        next: (gist) => {
+                            this.deleteGist();
+                            this.router.navigate([gist.id]);
                             this.toastService.showToast('Gist updated successfully!');
                         },
                         error: (error) => {
@@ -129,6 +148,7 @@ export class GistDetailStore extends ComponentStore<GistDetailState> {
         dto$.pipe(
             map(({ description, files }): GistDto => ({
                 description,
+                public: false,
                 files: {
                     ...files.reduce((acc, file) => {
                         acc[file.fileName] = { content: file.content };
@@ -137,7 +157,7 @@ export class GistDetailStore extends ComponentStore<GistDetailState> {
                 }
             })),
             switchMap((dto) => {
-                return this.gistService.createGist(dto).pipe(
+                return this.gistService.create(dto).pipe(
                     tap({
                         next: (gist) => {
                             this.router.navigate(['']);
@@ -146,6 +166,20 @@ export class GistDetailStore extends ComponentStore<GistDetailState> {
                         error: (error) => {
                             this.patchState({ error: error.message, loading: false });
                             this.toastService.showToast('Failed to create gist', ToastType.Error);
+                        },
+                    })
+                );
+            })
+        )
+    );
+
+    readonly deleteGist = this.effect<void>((trigger$) =>
+        trigger$.pipe(
+            switchMap(() => {
+                return this.gistService.delete(this.get().gist?.id || '').pipe(
+                    tap({
+                        error: (error) => {
+                            this.toastService.showToast('Failed to delete former gist.', ToastType.Error);
                         },
                     })
                 );

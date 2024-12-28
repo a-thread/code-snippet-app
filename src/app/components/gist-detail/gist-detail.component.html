@@ -1,10 +1,12 @@
 <div class="gist-detail">
     <form [formGroup]="gistForm" (ngSubmit)="onSubmit()">
         <div class="form-group actions">
-            <button type="button" class="btn btn-secondary" (click)="onAddFileClick()">Add File</button>
-
+            <button type="button" class="btn btn-secondary" (click)="navigateToSnippets()">Back</button>
             <div class="button-group">
-                <button type="button" class="btn btn-secondary" (click)="navigateToSnippets()">Back</button>
+                <button type="button" class="btn btn-secondary" (click)="onAddFileClick()">Add File</button>
+                <button type="button" class="btn btn-secondary" (click)="togglePublic()">
+                    {{ (isPublic$ | async) ? 'Make Private' : 'Make Public' }}
+                </button>
                 <button type="submit" class="btn btn-success">Save</button>
             </div>
         </div>

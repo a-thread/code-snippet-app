@@ -14,6 +14,14 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   }
 
+  .action-column {
+    width: 40px;
+  }
+
+  .sortable-column {
+    width: 50%;
+  }
+
   thead {
     background-color: #007bff;
     color: #fff;

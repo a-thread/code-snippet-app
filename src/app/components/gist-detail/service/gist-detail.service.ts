@@ -13,18 +13,21 @@ export class GistDetailService {
 
     constructor(private http: HttpClient) { }
 
-    getGistById(id: string): Observable<GistDetail> {
+    getById(id: string): Observable<GistDetail> {
         return this.http.get<GistDetail>(`${this.apiUrl}/${id}`);
     }
 
-    createGist(dto: GistDto): Observable<GistDetail> {
+    create(dto: GistDto): Observable<GistDetail> {
         return this.http.post<GistDetail>(this.apiUrl, {
             ...dto,
-            public: false,
         });
     }
 
-    updateGist(gist: GistDto): Observable<GistDetail> {
+    update(gist: GistDto): Observable<GistDetail> {
         return this.http.patch<GistDetail>(`${this.apiUrl}/${gist.id}`, gist);
+    }
+
+    delete(id: string): Observable<GistDetail> {
+        return this.http.delete<GistDetail>(`${this.apiUrl}/${id}`);
     }
 }
