@@ -1,5 +1,5 @@
 export const environment = {
     production: false,
-    githubClientId: 'Ov23lieJRJ0JWRW9Tb7g',
+    githubClientId: 'Ov23liUQTwWwH4ADKHOb',
     githubRedirectUri: 'http://localhost:4200/callback'
 };
