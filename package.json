@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "concurrently \"ng serve\" \"npm run start:server\"",
     "build": "ng build && tsc --project tsconfig.server.json",
+    "build:prod": "ng build --configuration production --base-href gist-app",
     "serve": "node dist/server/server.js",
     "test": "ng test",
     "lint": "eslint 'src/**/*.ts'",
