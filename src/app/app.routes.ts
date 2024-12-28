@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { AuthCallbackComponent } from './pages/auth-callback/auth-callback.component';
+import { AuthCallbackComponent } from './authentication/auth-callback/auth-callback.component';
 import { GistListComponent } from './pages/gist-list/gist-list.component';
 import { LoginComponent } from './pages/login/login.component';
 import { authGuard } from './authentication/auth.guard';
