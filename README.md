@@ -1,27 +1,102 @@
-# Gist APp
+# Gist App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.9.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-## Development server
+#### Deployed Link: [Explore Gist App](https://a-thread.github.io/gist-app/)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/` . The application will automatically reload if you change any of the source files.
+---
 
-## Code scaffolding
+#### Table of Contents
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module` .
+* [Description](#description)
+  + [Key Features](#key-features)
+  + [Authentication](#authentication)
+  + [Technologies Used](#technologies-used)
+  + [Security](#security)
+* [Contributing](#contributing)
+* [Questions](#questions)
+* [License](#license)
 
-## Build
+---
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Description
 
-## Running unit tests
+| home | detail |
+|--|--|
+| <img src="./public/img/home-page.png" alt="Home Page of Gist App" class="col-6"> | <img src="./public/img/detail-page.png" alt="Home Page of Gist App" class="col-6"> |
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+**Gist App** simplifies the management of GitHub gists, providing users with a seamless way to create, edit, view, and delete their gists. Designed for productivity and ease of use, this application is powered by robust technologies on both frontend and backend to ensure smooth operation and security.
 
-## Running end-to-end tests
+### Key Features
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+* **Gist Management**: Create, edit, delete, and organize GitHub gists effortlessly.
+* **Real-Time Sync**: Seamlessly integrates with GitHub for real-time updates.
+* **User-Friendly Interface**: Simple, responsive design for a smooth user experience.
 
-## Further help
+---
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+### Authentication
+
+Gist App uses **GitHub OAuth** for secure user authentication. The process includes:
+* Redirecting users to GitHub's login page.
+* Exchanging authorization codes for secure access tokens.
+* Managing authenticated requests to GitHub's API securely.
+
+---
+
+### Technologies Used
+
+#### Frontend
+
+* **Framework**: [Angular](https://angular.io/) (v19.0.5)
+* **Styling**: SCSS
+* **Libraries**: 
+  + [PrismJS](https://prismjs.com/) for syntax highlighting
+  + [RxJS](https://rxjs.dev/) for reactive programming
+
+#### Backend
+
+* **Framework**: [Express.js](https://expressjs.com/)
+* **Authentication**: GitHub OAuth
+* **Libraries**:
+  + [Axios](https://axios-http.com/) for HTTP requests
+  + [dotenv](https://github.com/motdotla/dotenv) for secure environment variable management
+  + [CORS](https://github.com/expressjs/cors) for cross-origin request handling
+
+---
+
+### Security
+
+**Authentication**:
+* OAuth 2.0 protocol ensures that user credentials are never exposed.
+
+**Application**:
+* Sensitive data like API keys and client secrets are managed through environment variables.
+* Backend endpoints are safeguarded against common vulnerabilities (e.g., XSS, CSRF).
+
+**Data**:
+
+* No user data is shared with third parties, ensuring complete privacy.
+* All data transmitted between the application and GitHub's API is encrypted using HTTPS to prevent interception.
+
+---
+
+### Contributing
+
+If you'd like to contribute to this application, feel free to submit a pull request!
+
+---
+
+### Questions
+
+If you have any questions, please [email me](mailto:a.threadless@proton.com).
+
+Explore more of my work on [GitHub](https://github.com/a-thread).
+
+---
+
+### License
+
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
+*© 2024 Aiden Threadgoode*
