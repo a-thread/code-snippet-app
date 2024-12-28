@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { AccessToken } from '../models/access-token';
+import { AccessToken } from '../shared/models/access-token';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 

@@ -4,7 +4,7 @@ import { GistDetailStore } from './gist-detail.store';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { GistDetail } from '../../models/gist-detail';
+import { GistDetail } from '../../shared/models/gist-detail';
 
 @Component({
   selector: 'app-gist-detail',

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { GistList } from '../../../models/gists';
+import { GistList } from '../../../shared/models/gists';
 import { RouterModule } from '@angular/router';
 import { SortColumnIconPipe } from './sort-column-icon.pipe';
 import { GistTableStore } from './gist-table.store';

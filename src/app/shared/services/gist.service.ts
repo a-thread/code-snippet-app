@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { GistList } from '../../models/gists';
-import { GistDetail } from '../../models/gist-detail';
-import { GistDto } from '../../models/gist-dto';
+import { GistList } from '../models/gists';
+import { GistDetail } from '../models/gist-detail';
+import { GistDto } from '../models/gist-dto';
 
 @Injectable({
   providedIn: 'root'

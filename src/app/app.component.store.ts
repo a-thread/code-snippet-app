@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
 import { tap, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { AccessToken } from './models/access-token';
+import { AccessToken } from './shared/models/access-token';
 import { AuthTokenService } from './authentication/auth-token-service';
 import { OAuthService } from './authentication/oauth.service';
 

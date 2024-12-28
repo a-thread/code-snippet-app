@@ -1,11 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { GistList } from '../../../models/gists';
+import { GistList } from '../../../shared/models/gists';
 import { GistTableVm } from './gist-table-vm';
 import { switchMap, tap } from 'rxjs';
 import { GistService } from '../../../shared/services/gist.service';
 import { ToastService } from '../../../toast/toast.service';
-import { ToastType } from '../../../models/toast-message';
+import { ToastType } from '../../../shared/models/toast-message';
 
 export interface GistTableState {
     gists: GistList[];

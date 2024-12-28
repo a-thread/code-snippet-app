@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { GistList } from '../../../models/gists';
+import { GistList } from '../../../shared/models/gists';
 
 @Pipe({
   name: 'sortColumnIcon'

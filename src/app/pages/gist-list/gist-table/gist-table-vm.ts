@@ -1,4 +1,4 @@
-import { GistList } from "../../../models/gists";
+import { GistList } from "../../../shared/models/gists";
 
 export interface GistTableVm {
     sortedGists: GistList[];

@@ -1,12 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GistDetail } from '../../models/gist-detail';
+import { GistDetail } from '../../shared/models/gist-detail';
 import { map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
-import { FileSlim } from '../../models/file-slim';
+import { FileSlim } from '../../shared/models/file-slim';
 import { ToastService } from '../../toast/toast.service';
-import { ToastType } from '../../models/toast-message';
-import { GistDto } from '../../models/gist-dto';
+import { ToastType } from '../../shared/models/toast-message';
+import { GistDto } from '../../shared/models/gist-dto';
 import { GistService } from '../../shared/services/gist.service';
 
 interface GistDetailState {
