@@ -2,12 +2,18 @@
     <form [formGroup]="gistForm" (ngSubmit)="onSubmit()">
         <div class="form-group actions">
             <button type="button" class="btn btn-secondary" (click)="navigateToSnippets()">Back</button>
-            <div class="button-group">
-                <button type="button" class="btn btn-secondary" (click)="onAddFileClick()">Add File</button>
-                <button type="button" class="btn btn-secondary" (click)="togglePublic()">
-                    {{ (isPublic$ | async) ? 'Make Private' : 'Make Public' }}
+            <button type="submit" class="btn btn-primary">Save</button>
+            <div class="dropdown-btn-group">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    &hellip;
                 </button>
-                <button type="submit" class="btn btn-success">Save</button>
+                <div class="dropdown-menu">
+                    <button class="dropdown-btn" type="button" (click)="onAddFileClick()">Add File</button>
+                    <button class="dropdown-btn" type="button" (click)="togglePublic()">
+                        {{ (isPublic$ | async) ? 'Make Private' : 'Make Public' }}
+                    </button>
+                </div>
             </div>
         </div>
         <div class="form-group">

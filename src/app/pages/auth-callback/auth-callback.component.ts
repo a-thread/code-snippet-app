@@ -5,9 +5,9 @@ import { AppStore } from '../../app.component.store';
 import { of } from 'rxjs';
 
 @Component({
-    selector: 'app-auth-callback',
-    imports: [CommonModule],
-    template: `<p>Authenticating...</p>`
+  selector: 'app-auth-callback',
+  imports: [CommonModule],
+  template: `<p>Authenticating...</p>`
 })
 export class AuthCallbackComponent implements OnInit {
   constructor(
@@ -19,7 +19,6 @@ export class AuthCallbackComponent implements OnInit {
     // Get the authorization code from the URL query parameters
     this.route.queryParams.subscribe(params => {
       const code = params['code'];
-      console.log(code)
       if (code) {
         this.appStore.authenticateUser(of(code));
       }

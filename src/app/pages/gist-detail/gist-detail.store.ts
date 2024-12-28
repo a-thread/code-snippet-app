@@ -3,11 +3,11 @@ import { ComponentStore } from '@ngrx/component-store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GistDetail } from '../../models/gist-detail';
 import { map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
-import { GistDetailService } from './service/gist-detail.service';
 import { FileSlim } from '../../models/file-slim';
-import { ToastService } from '../../services/toast.service';
+import { ToastService } from '../../toast/toast.service';
 import { ToastType } from '../../models/toast-message';
 import { GistDto } from '../../models/gist-dto';
+import { GistService } from '../../shared/services/gist.service';
 
 interface GistDetailState {
     gist: GistDetail | null;
@@ -18,7 +18,7 @@ interface GistDetailState {
 @Injectable()
 export class GistDetailStore extends ComponentStore<GistDetailState> {
 
-    gistService = inject(GistDetailService);
+    gistService = inject(GistService);
     route = inject(ActivatedRoute);
     router = inject(Router);
     toastService = inject(ToastService);

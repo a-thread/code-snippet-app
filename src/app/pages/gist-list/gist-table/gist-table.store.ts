@@ -3,8 +3,8 @@ import { ComponentStore } from '@ngrx/component-store';
 import { GistList } from '../../../models/gists';
 import { GistTableVm } from './gist-table-vm';
 import { switchMap, tap } from 'rxjs';
-import { GistService } from '../../../services/gist.service';
-import { ToastService } from '../../../services/toast.service';
+import { GistService } from '../../../shared/services/gist.service';
+import { ToastService } from '../../../toast/toast.service';
 import { ToastType } from '../../../models/toast-message';
 
 export interface GistTableState {
@@ -83,7 +83,7 @@ export class GistTableStore extends ComponentStore<GistTableState> {
 
     readonly deleteGist = this.effect<string>((id$) =>
         id$.pipe(
-            switchMap((id) => this.gistService.deleteGist(id).pipe(
+            switchMap((id) => this.gistService.delete(id).pipe(
                 tap({
                     next: () => {
                         this.setSnippets(this.get().gists.filter((gist) => gist.id !== id));

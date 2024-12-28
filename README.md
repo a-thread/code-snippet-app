@@ -67,17 +67,10 @@ Gist App uses **GitHub OAuth** for secure user authentication. The process inclu
 
 ### Security
 
-**Authentication**:
 * OAuth 2.0 protocol ensures that user credentials are never exposed.
-
-**Application**:
 * Sensitive data like API keys and client secrets are managed through environment variables.
 * Backend endpoints are safeguarded against common vulnerabilities (e.g., XSS, CSRF).
-
-**Data**:
-
-* No user data is shared with third parties, ensuring complete privacy.
-* All data transmitted between the application and GitHub's API is encrypted using HTTPS to prevent interception.
+* No user data is stored by **Gist App**, ensuring that user data privacy can be as simple as possible.
 
 ---
 
