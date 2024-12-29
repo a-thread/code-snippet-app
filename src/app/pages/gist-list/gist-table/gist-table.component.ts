@@ -5,11 +5,15 @@ import { RouterModule } from '@angular/router';
 import { GistTableStore } from './gist-table.store';
 import { MatIconModule } from '@angular/material/icon';
 import { PaginatorComponent } from './paginator/paginator.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-gist-table',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, MatIconModule, PaginatorComponent],
+  imports: [MatCardModule, MatProgressSpinnerModule, CommonModule, FormsModule, RouterModule, MatIconModule, PaginatorComponent, MatButtonModule, MatTableModule],
   providers: [GistTableStore],
   templateUrl: './gist-table.component.html',
   styleUrl: './gist-table.component.scss'
@@ -20,11 +24,6 @@ export class GistTableComponent {
   displayedColumns: string[] = ['description', 'updated_at', 'action'];
 
   viewModel$ = this.store.state$;
-
-  toggleAll(event: Event) {
-    const isChecked = (event?.target as HTMLInputElement)?.checked;
-    this.store.toggleAll(isChecked);
-  }
 
   deleteGist(id: string) {
     this.store.deleteGist(id);

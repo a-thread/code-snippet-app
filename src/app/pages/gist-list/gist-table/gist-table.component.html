@@ -1,29 +1,43 @@
 <div *ngIf="viewModel$ | async as vm" class="flex-container">
     <div class="table-container">
-        <table class="gist-table">
-            <thead>
-                <tr>
-                    <th class="data-column">Description</th>
-                    <th class="data-column">Last Updated</th>
-                    <th></th>
-                </tr>
-            </thead>
+        @if (vm.isLoading) {
+        <div class="loading-container">
+            <mat-spinner></mat-spinner>
+        </div>
+        } @else {
 
-            <tbody>
-                <tr *ngFor="let gist of vm.gists">
-                    <td class="data-column">
-                        <a [routerLink]="['', gist.id]">{{ gist.description }}</a>
-                    </td>
-                    <td class="data-column">{{ gist.updated_at | date:'shortDate' }}</td>
-                    <td class="action-column">
-                        <button mat-fab aria-label="Delete Gist" (click)="deleteGist(gist.id)">
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <mat-card appearance="outlined">
+            <mat-card-content>
+                <table mat-table [dataSource]="vm.gists" class="gist-table mat-elevation-z8">
 
-        <app-paginator></app-paginator>
+                    <ng-container matColumnDef="description">
+                        <th mat-header-cell *matHeaderCellDef> Description </th>
+                        <td mat-cell *matCellDef="let gist"> <a [routerLink]="['', gist.id]">{{ gist.description }}</a>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="updated_at">
+                        <th mat-header-cell *matHeaderCellDef>Last Updated</th>
+                        <td mat-cell *matCellDef="let gist"> {{ gist.updated_at | date:'shortDate' }} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="action">
+                        <th class="action-column" mat-header-cell *matHeaderCellDef></th>
+                        <td class="action-column" mat-cell *matCellDef="let gist">
+                            <button mat-icon-button aria-label="Delete Gist" (click)="deleteGist(gist.id)">
+                                <mat-icon class="trash-can">delete</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+
+                <app-paginator></app-paginator>
+
+            </mat-card-content>
+        </mat-card>
+        }
     </div>
 </div>

@@ -1,3 +1,5 @@
-<button (click)="toggleTheme()">
-    {{ (isDarkMode$ | async) ? 'Switch to Light Theme' : 'Switch to Dark Theme' }}
-</button>
+<p class="theme-toggle">
+    <mat-icon>light_mode</mat-icon>
+    <mat-slide-toggle (change)="toggleTheme()"></mat-slide-toggle>
+    <mat-icon>dark_mode</mat-icon>
+</p>

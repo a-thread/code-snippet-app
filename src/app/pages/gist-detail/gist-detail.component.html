@@ -1,43 +1,47 @@
 <div class="gist-detail">
-    <form [formGroup]="gistForm" class="form-group">
-        <div class="actions">
-            <a mat-button href="">Back</a>
-            <button mat-button color="primary" [disabled]="!gistForm.valid || !gistForm.dirty"
-                (click)="onSubmit()">Save</button>
+    <mat-card appearance="outlined">
+        <mat-card-content>
+            <form [formGroup]="gistForm" class="form-group">
+                <div class="actions">
+                    <a mat-button href="">Back</a>
+                    <button mat-button color="primary" [disabled]="!gistForm.valid || !gistForm.dirty"
+                        (click)="onSubmit()">Save</button>
 
-            <div class="ellipsis-wrapper">
-                <button mat-icon-button [matMenuTriggerFor]="moreActions" aria-label="More Actions">
-                    <mat-icon>more_horizontal</mat-icon>
-                </button>
-            </div>
-            <mat-menu #moreActions="matMenu">
-                <button mat-menu-item (click)="onAddFileClick()">
-                    Add File
-                </button>
-                <button mat-menu-item (click)="togglePublic()">
-                    {{ (isPublic$ | async) ? 'Make Private' : 'Make Public' }}
-                </button>
-                <button mat-menu-item (click)="deleteClicked()">
-                    Delete
-                </button>
-            </mat-menu>
-        </div>
-        <mat-form-field appearance="outline">
-            <mat-label>Name</mat-label>
-            <input formControlName="name" matInput placeholder="Gist Name">
-        </mat-form-field>
-        <div formArrayName="files" *ngFor="let file of fileForms.controls; let i = index" class="form-group">
-            <div [formGroupName]="i" class="form-group">
+                    <div class="ellipsis-wrapper">
+                        <button mat-icon-button [matMenuTriggerFor]="moreActions" aria-label="More Actions">
+                            <mat-icon>more_horizontal</mat-icon>
+                        </button>
+                    </div>
+                    <mat-menu #moreActions="matMenu">
+                        <button mat-menu-item (click)="onAddFileClick()">
+                            Add File
+                        </button>
+                        <button mat-menu-item [disabled]="!gistForm.valid" (click)="togglePublic()">
+                            {{ (isPublic$ | async) ? 'Make Private' : 'Make Public' }}
+                        </button>
+                        <button mat-menu-item [disabled]="isNew$ | async" (click)="deleteClicked()">
+                            Delete
+                        </button>
+                    </mat-menu>
+                </div>
                 <mat-form-field appearance="outline">
-                    <mat-label>File Name</mat-label>
-                    <input formControlName="fileName" matInput placeholder="File Name">
+                    <mat-label>Name</mat-label>
+                    <input formControlName="name" matInput placeholder="Gist Name">
                 </mat-form-field>
-                <mat-form-field appearance="outline">
-                    <mat-label>Content</mat-label>
-                    <textarea formControlName="content" matInput placeholder="Enter file content here"
-                        rows="10"></textarea>
-                </mat-form-field>
-            </div>
-        </div>
-    </form>
+                <div formArrayName="files" *ngFor="let file of fileForms.controls; let i = index" class="form-group">
+                    <div [formGroupName]="i" class="form-group">
+                        <mat-form-field appearance="outline">
+                            <mat-label>File Name</mat-label>
+                            <input formControlName="fileName" matInput placeholder="File Name">
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Content</mat-label>
+                            <textarea formControlName="content" matInput placeholder="Enter file content here"
+                                rows="10"></textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
 </div>

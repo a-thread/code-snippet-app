@@ -4,7 +4,7 @@ import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 })
 export class ThemeService {
     private renderer: Renderer2;
-    private darkThemeClass = 'dark-theme';
+    private darkThemeClass = 'dark';
     private localStorageKey = 'shouldEnabledDarkTheme';
 
     constructor(rendererFactory: RendererFactory2) {

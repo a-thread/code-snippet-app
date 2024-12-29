@@ -1,5 +1,17 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
 @use '@angular/material'as mat;
+@use "./styles/_theme-colors.scss"as theme-colors;
 
+html {
+  @include mat.theme((color: (theme-type: light,
+        primary: theme-colors.$primary-palette,
+        tertiary: theme-colors.$tertiary-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    ));
+}
 
 html,
 body {
@@ -9,13 +21,12 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-}
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
 
-html {
-  color-scheme: light dark;
-  @include mat.theme((color: mat.$violet-palette,
-      typography: Roboto,
-      density: 0));
+  a {
+    color: var(--mat-sys-primary);
+  }
 }
 
 .snack {

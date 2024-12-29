@@ -7,6 +7,7 @@ import { ToastService } from '../../../shared/services/toast.service';
 import { ToastType } from 'src/app/shared/models/toast-message';
 
 export interface GistTableState {
+    isLoading: boolean;
     gists: GistList[];
     pageSize: number;
     currentPage: number;
@@ -20,6 +21,7 @@ export class GistTableStore extends ComponentStore<GistTableState> {
 
     constructor() {
         super({
+            isLoading: false,
             gists: [],
             pageSize: 5,
             currentPage: 1,
@@ -29,7 +31,6 @@ export class GistTableStore extends ComponentStore<GistTableState> {
         this.getSnippetsOnPageChange(this.getPageTrigger$);
     }
 
-    readonly gists$ = this.select((state) => state.gists);
     readonly currentPage$ = this.select(state => state.currentPage);
     readonly pageSize$ = this.select(state => state.pageSize);
     readonly getPageTrigger$ = this.select(
@@ -69,23 +70,18 @@ export class GistTableStore extends ComponentStore<GistTableState> {
         currentPage: 1
     }));
 
-    readonly setSnippets = this.updater((state, gists: GistList[]) => ({
+    readonly setGists = this.updater((state, gists: GistList[]) => ({
         ...state,
+        isLoading: false,
         gists
     }));
 
-    readonly toggleAll = this.updater((state, isChecked: boolean) => {
-        return {
-            ...state,
-            gists: state.gists.map((gist) => ({ ...gist, selected: isChecked })),
-        };
-    });
-
     readonly getSnippets = this.effect<void>(trigger$ =>
         trigger$.pipe(
+            tap(() => this.patchState({ isLoading: true, gists: [] })),
             switchMap(() => {
                 return this.gistService.getList(this.get().pageSize, this.get().currentPage).pipe(
-                    tap((gists) => this.setSnippets(gists)),
+                    tap((gists) => this.setGists(gists)),
                 );
             })
         )
@@ -93,9 +89,10 @@ export class GistTableStore extends ComponentStore<GistTableState> {
 
     readonly getSnippetsOnPageChange = this.effect<{ pageSize: number, currentPage: number | string }>(trigger$ =>
         trigger$.pipe(
+            tap(() => this.patchState({ isLoading: true, gists: [] })),
             switchMap(({ pageSize, currentPage }) => {
                 return this.gistService.getList(pageSize, currentPage).pipe(
-                    tap((gists) => this.setSnippets(gists)),
+                    tap((gists) => this.setGists(gists)),
                 );
             })
         )
@@ -106,7 +103,7 @@ export class GistTableStore extends ComponentStore<GistTableState> {
             switchMap((id) => this.gistService.delete(id).pipe(
                 tap({
                     next: () => {
-                        this.setSnippets(this.get().gists.filter((gist) => gist.id !== id));
+                        this.setGists(this.get().gists.filter((gist) => gist.id !== id));
                         this.toastService.show('Gist deleted successfully!');
                     },
                     error: (error) => {

@@ -1,11 +1,16 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ThemeStore } from './theme.store'; // Adjust the import path as necessary
-import { AsyncPipe } from '@angular/common';
-
+import { MatIconModule } from '@angular/material/icon';
+import {
+  MatSlideToggleModule,
+} from '@angular/material/slide-toggle';
 @Component({
   selector: 'app-nav-bar',
   standalone: true,
-  imports: [AsyncPipe],
+  imports: [
+    MatIconModule,
+    MatSlideToggleModule,
+  ],
   providers: [ThemeStore],
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.scss']
@@ -13,8 +18,6 @@ import { AsyncPipe } from '@angular/common';
 export class NavBarComponent {
 
   private themeStore = inject(ThemeStore);
-
-  isDarkMode$ = this.themeStore.isDarkMode$;
 
   toggleTheme() {
     this.themeStore.toggleTheme();
