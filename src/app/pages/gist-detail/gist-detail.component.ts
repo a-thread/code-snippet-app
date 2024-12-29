@@ -11,11 +11,22 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
+import { LoadingContainerComponent } from 'src/app/components/loading-container/loading-container.component';
 
 @Component({
   selector: 'app-gist-detail',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatCardModule, CommonModule, ReactiveFormsModule, MatIconModule, MatMenuModule, MatButtonModule, MatInputModule, MatFormFieldModule],
+  imports: [
+    MatCardModule,
+    CommonModule,
+    ReactiveFormsModule,
+    MatIconModule,
+    MatMenuModule,
+    MatButtonModule,
+    MatInputModule,
+    MatFormFieldModule,
+    LoadingContainerComponent,
+  ],
   templateUrl: './gist-detail.component.html',
   styleUrls: ['./gist-detail.component.scss'],
   providers: [GistDetailStore]
@@ -32,8 +43,7 @@ export class GistDetailComponent implements OnDestroy {
   private store = inject(GistDetailStore);
   private router = inject(Router);
 
-  readonly isNew$ = this.store.shouldCreateNew$;
-  readonly isPublic$ = this.store.isPublic$;
+  readonly viewModel$ = this.store.viewModel$;
 
   get formValue() {
     return this.gistForm.value;

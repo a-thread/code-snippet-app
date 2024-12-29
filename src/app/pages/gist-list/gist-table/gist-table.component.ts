@@ -8,12 +8,22 @@ import { PaginatorComponent } from './paginator/paginator.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { LoadingContainerComponent } from 'src/app/components/loading-container/loading-container.component';
 
 @Component({
   selector: 'app-gist-table',
   standalone: true,
-  imports: [MatCardModule, MatProgressSpinnerModule, CommonModule, FormsModule, RouterModule, MatIconModule, PaginatorComponent, MatButtonModule, MatTableModule],
+  imports: [
+    MatCardModule,
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    MatIconModule,
+    PaginatorComponent,
+    MatButtonModule,
+    MatTableModule,
+    LoadingContainerComponent,
+  ],
   providers: [GistTableStore],
   templateUrl: './gist-table.component.html',
   styleUrl: './gist-table.component.scss'

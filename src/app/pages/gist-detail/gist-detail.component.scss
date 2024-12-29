@@ -2,8 +2,7 @@
   border-radius: 8px;
   padding: 20px;
   max-width: 600px;
-  margin: 20px auto;
-
+  margin: auto;
 
   .ellipsis-wrapper {
     display: flex;
@@ -27,24 +26,10 @@
     gap: 8px;
     margin-bottom: 8px;
 
-    @media (max-width: 500px) {
-      flex-direction: column-reverse;
-      align-items: stretch;
-    }
-
     .button-group {
       display: flex;
       justify-content: flex-end;
       gap: 8px;
-
-      @media (max-width: 500px) {
-        flex-direction: column-reverse;
-        align-items: stretch;
-
-        button {
-          margin-bottom: 8px;
-        }
-      }
     }
 
   }

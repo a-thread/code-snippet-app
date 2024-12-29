@@ -1,9 +1,7 @@
 <div *ngIf="viewModel$ | async as vm" class="flex-container">
     <div class="table-container">
         @if (vm.isLoading) {
-        <div class="loading-container">
-            <mat-spinner></mat-spinner>
-        </div>
+        <app-loading-container></app-loading-container>
         } @else {
 
         <mat-card appearance="outlined">

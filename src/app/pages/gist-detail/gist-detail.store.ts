@@ -33,8 +33,19 @@ export class GistDetailStore extends ComponentStore<GistDetailState> {
     readonly loading$ = this.select((state) => state.loading);
     readonly error$ = this.select((state) => state.error);
     readonly shouldCreateNew$ = this.select(this.route.paramMap, (params) => params.get('id') === 'new');
-
     readonly isPublic$ = this.select(this.gist$, (gist) => gist?.public || false);
+
+    readonly viewModel$ = this.select(
+        this.loading$,
+        this.isPublic$,
+        this.shouldCreateNew$,
+        (isLoading, isPublic, isNew) => ({
+            isLoading,
+            isPublic,
+            isNew,
+        })
+    )
+
 
     readonly loadGistDetail = this.effect<void>((trigger$) =>
         trigger$.pipe(
@@ -129,13 +140,13 @@ export class GistDetailStore extends ComponentStore<GistDetailState> {
                 this.gistService.create(dto).pipe(
                     tap({
                         next: (gist) => {
-                            this.deleteGist();
+                            this.deleteGistAfterPublishing();
                             this.router.navigate([gist.id]);
                             this.toastService.show('Gist updated successfully!');
                         },
                         error: (error) => {
                             this.patchState({ error: error.message, loading: false });
-                            this.toastService.show('Failed to update gist', ToastType.Error);
+                            this.toastService.show('Failed to update gist.', ToastType.Error);
                         },
                     })
                 )

@@ -1,4 +1,7 @@
-<div class="gist-detail">
+<div *ngIf="viewModel$ | async as vm" class="gist-detail">
+    @if (vm.isLoading) {
+    <app-loading-container></app-loading-container>
+    } @else {
     <mat-card appearance="outlined">
         <mat-card-content>
             <form [formGroup]="gistForm" class="form-group">
@@ -17,9 +20,9 @@
                             Add File
                         </button>
                         <button mat-menu-item [disabled]="!gistForm.valid" (click)="togglePublic()">
-                            {{ (isPublic$ | async) ? 'Make Private' : 'Make Public' }}
+                            {{ vm.isPublic ? 'Make Private' : 'Make Public' }}
                         </button>
-                        <button mat-menu-item [disabled]="isNew$ | async" (click)="deleteClicked()">
+                        <button mat-menu-item [disabled]="vm.isNew" (click)="deleteClicked()">
                             Delete
                         </button>
                     </mat-menu>
@@ -44,4 +47,5 @@
             </form>
         </mat-card-content>
     </mat-card>
+    }
 </div>

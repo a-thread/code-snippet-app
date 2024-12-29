@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { tap } from 'rxjs';
+import { map, shareReplay, tap } from 'rxjs';
 import { ThemeService } from './theme.service';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 export interface ThemeState {
     isDarkMode: boolean;
@@ -14,8 +15,7 @@ export class ThemeStore extends ComponentStore<ThemeState> {
 
 
     private themeService = inject(ThemeService);
-
-    readonly isDarkMode$ = this.select((state) => state.isDarkMode);
+    private breakpointObserver = inject(BreakpointObserver);
 
     constructor() {
         super({
@@ -25,6 +25,13 @@ export class ThemeStore extends ComponentStore<ThemeState> {
         this.initTheme();
         this.listenToThemeChange();
     }
+
+    isHandset$ = this.breakpointObserver
+        .observe(Breakpoints.Handset)
+        .pipe(
+            map((result) => result.matches),
+            shareReplay()
+        );
 
     readonly toggleTheme = this.updater((state) => {
         const isDarkMode = !state.isDarkMode;
