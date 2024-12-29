@@ -1,108 +1,44 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material'as mat;
+
+
+html,
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
+  height: 100%;
+}
+
+body {
   margin: 0;
-  padding: 2rem;
-  color: #000;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
-  @media (prefers-color-scheme: dark) {
-    background-color: #000;
-    color: #f5f5f5;
+html {
+  color-scheme: light dark;
+  @include mat.theme((color: mat.$violet-palette,
+      typography: Roboto,
+      density: 0));
+}
+
+.snack {
+  color: #FFFFFF;
+
+  &-success {
+    @include mat.snack-bar-overrides((container-color: #28a745,
+      ));
   }
 
-  button.btn {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-
-    &:hover {
-      background-color: #0056b3;
-      transform: scale(1.05);
-    }
-
-    @media (prefers-color-scheme: dark) {
-      background-color: #0056b3;
-
-      &:hover {
-        background-color: #003f7f;
-      }
-    }
+  &-error {
+    @include mat.snack-bar-overrides((container-color: #dc3545,
+      ));
   }
 
-
-
-  button.btn-secondary {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    color: #fff;
-    background-color: #6c757d;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-
-    &:hover {
-      background-color: #5a6268;
-      transform: scale(1.05);
-    }
-
-    &:focus {
-      outline: none;
-      box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
-    }
+  &-info {
+    @include mat.snack-bar-overrides((container-color: #17a2b8,
+      ));
   }
 
-  button.dropdown-btn-group {
-    position: relative;
-    display: inline-block;
-    gap: 8px;
-
-    & .dropdown-toggle {
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .dropdown-menu {
-      display: none;
-      position: absolute;
-      right: 0;
-      background-color: #6c757d;
-      min-width: 160px;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-      z-index: 1;
-      border-radius: 4px 0 4px 4px;
-      padding: 10px 0;
-
-      button.dropdown-btn {
-        color: #fff;
-        background-color: #6c757d;
-        padding: 10px 20px;
-        text-decoration: none;
-        outline: none;
-        display: block;
-        font-size: 16px;
-        width: 100%;
-        border: none;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-
-        &:hover {
-          background-color: #5a6268;
-        }
-
-      }
-    }
-
-    &:hover .dropdown-menu {
-      display: block;
-    }
+  &-warning {
+    @include mat.snack-bar-overrides((container-color: #ffc107,
+        supporting-text-color: #212529,
+      ));
   }
 }

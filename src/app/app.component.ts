@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ToastComponent } from './toast/toast.component';
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 
 @Component({
     selector: 'app-root',
     template: `
+    <app-nav-bar></app-nav-bar>
     <router-outlet></router-outlet>
-    <app-toast></app-toast>
     `,
     imports: [
         RouterOutlet,
-        ToastComponent,
+        NavBarComponent
     ],
 })
 export class AppComponent { }

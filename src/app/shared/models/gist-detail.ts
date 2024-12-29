@@ -1,4 +1,4 @@
-import { BaseGist } from "./gists";
+import { BaseGist } from "./base-gist";
 
 export interface GistDetailFile {
     content: string;

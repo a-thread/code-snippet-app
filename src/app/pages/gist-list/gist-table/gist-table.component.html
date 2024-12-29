@@ -1,34 +1,29 @@
-<table *ngIf="viewModel$ | async as vm" class="gist-table">
-    <thead>
-        <tr>
-            <th class="sortable-column" (click)="sort('description')">
-                Description
-                <span>
-                    {{ vm?.sortColumn | sortColumnIcon:'description':vm?.sortOrder }}
-                </span>
-            </th>
-            <th class="sortable-column" (click)="sort('updated_at')">
-                Last Updated
-                <span>
-                    {{ vm?.sortColumn | sortColumnIcon:'updated_at':vm?.sortOrder }}
-                </span>
-            </th>
-            <th class="action-column"></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let gist of vm.sortedGists">
-            <td class="sortable-column">
-                <a [routerLink]="['', gist.id]">{{ gist.description }}</a>
-            </td>
-            <td class="sortable-column">
-                {{ gist.updated_at | date:'shortDate' }}
-            </td>
-            <td class="action-column">
-                <button (click)="deleteGist(gist.id)">
-                    🗑️
-                </button>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div *ngIf="viewModel$ | async as vm" class="flex-container">
+    <div class="table-container">
+        <table class="gist-table">
+            <thead>
+                <tr>
+                    <th class="data-column">Description</th>
+                    <th class="data-column">Last Updated</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let gist of vm.gists">
+                    <td class="data-column">
+                        <a [routerLink]="['', gist.id]">{{ gist.description }}</a>
+                    </td>
+                    <td class="data-column">{{ gist.updated_at | date:'shortDate' }}</td>
+                    <td class="action-column">
+                        <button mat-fab aria-label="Delete Gist" (click)="deleteGist(gist.id)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <app-paginator></app-paginator>
+    </div>
+</div>

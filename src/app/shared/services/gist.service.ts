@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { GistList } from '../models/gists';
+import { GistList } from '../models/gist-list';
 import { GistDetail } from '../models/gist-detail';
 import { GistDto } from '../models/gist-dto';
 
@@ -13,8 +13,11 @@ export class GistService {
 
   constructor(private http: HttpClient) { }
 
-  getList(): Observable<GistList[]> {
-    return this.http.get<GistList[]>(this.baseUrl);
+  getList(pageSize: number, currentPage: number | string): Observable<GistList[]> {
+    const params = new HttpParams()
+      .set("page", currentPage)
+      .set("per_page", pageSize);
+    return this.http.get<GistList[]>(this.baseUrl, { params });
   }
 
   getById(id: string): Observable<GistDetail> {

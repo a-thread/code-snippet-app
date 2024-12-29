@@ -1,15 +1,20 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GistDetailStore } from './gist-detail.store';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { GistDetail } from '../../shared/models/gist-detail';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-gist-detail',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, ReactiveFormsModule, MatIconModule, MatMenuModule, MatButtonModule, MatInputModule, MatFormFieldModule],
   templateUrl: './gist-detail.component.html',
   styleUrls: ['./gist-detail.component.scss'],
   providers: [GistDetailStore]
@@ -74,6 +79,10 @@ export class GistDetailComponent implements OnDestroy {
     }
   }
 
+  deleteClicked(): void {
+    this.store.deleteGist();
+  }
+
   onAddFileClick(): void {
     this.fileForms.insert(0, new FormGroup({
       fileName: new FormControl<string>(''),
@@ -86,8 +95,8 @@ export class GistDetailComponent implements OnDestroy {
 
     Object.keys(gist.files).forEach((key, index) => {
       newFormArray.push(new FormGroup({
-        fileName: new FormControl<string>(key),
-        content: new FormControl<string>(gist.files[key].content || ''),
+        fileName: new FormControl<string>(key, Validators.required),
+        content: new FormControl<string>(gist.files[key].content || '', Validators.required),
       }));
     });
 

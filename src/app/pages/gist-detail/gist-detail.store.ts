@@ -4,10 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GistDetail } from '../../shared/models/gist-detail';
 import { map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { FileSlim } from '../../shared/models/file-slim';
-import { ToastService } from '../../toast/toast.service';
 import { ToastType } from '../../shared/models/toast-message';
 import { GistDto } from '../../shared/models/gist-dto';
 import { GistService } from '../../shared/services/gist.service';
+import { ToastService } from '../../shared/services/toast.service';
 
 interface GistDetailState {
     gist: GistDetail | null;
@@ -102,11 +102,11 @@ export class GistDetailStore extends ComponentStore<GistDetailState> {
                     tap({
                         next: (gist) => {
                             this.router.navigate(['']);
-                            this.toastService.showToast('Gist updated successfully!');
+                            this.toastService.show('Gist updated successfully!');
                         },
                         error: (error) => {
                             this.patchState({ error: error.message, loading: false });
-                            this.toastService.showToast('Failed to update gist', ToastType.Error);
+                            this.toastService.show('Failed to update gist', ToastType.Error);
                         },
                     })
                 )
@@ -119,7 +119,6 @@ export class GistDetailStore extends ComponentStore<GistDetailState> {
             tap(() => this.patchState({ loading: true, error: null })),
             map((): GistDto => {
                 const gist = this.get().gist;
-                console.log(gist);
                 return {
                     public: !gist?.public,
                     description: gist?.description || '',
@@ -132,11 +131,11 @@ export class GistDetailStore extends ComponentStore<GistDetailState> {
                         next: (gist) => {
                             this.deleteGist();
                             this.router.navigate([gist.id]);
-                            this.toastService.showToast('Gist updated successfully!');
+                            this.toastService.show('Gist updated successfully!');
                         },
                         error: (error) => {
                             this.patchState({ error: error.message, loading: false });
-                            this.toastService.showToast('Failed to update gist', ToastType.Error);
+                            this.toastService.show('Failed to update gist', ToastType.Error);
                         },
                     })
                 )
@@ -161,11 +160,25 @@ export class GistDetailStore extends ComponentStore<GistDetailState> {
                     tap({
                         next: (gist) => {
                             this.router.navigate(['']);
-                            this.toastService.showToast('Gist created successfully!');
+                            this.toastService.show('Gist created successfully!');
                         },
                         error: (error) => {
                             this.patchState({ error: error.message, loading: false });
-                            this.toastService.showToast('Failed to create gist', ToastType.Error);
+                            this.toastService.show('Failed to create gist', ToastType.Error);
+                        },
+                    })
+                );
+            })
+        )
+    );
+
+    readonly deleteGistAfterPublishing = this.effect<void>((trigger$) =>
+        trigger$.pipe(
+            switchMap(() => {
+                return this.gistService.delete(this.get().gist?.id || '').pipe(
+                    tap({
+                        error: (error) => {
+                            this.toastService.show('Failed to delete former gist.', ToastType.Error);
                         },
                     })
                 );
@@ -178,8 +191,12 @@ export class GistDetailStore extends ComponentStore<GistDetailState> {
             switchMap(() => {
                 return this.gistService.delete(this.get().gist?.id || '').pipe(
                     tap({
+                        next: (gist) => {
+                            this.router.navigate(['']);
+                            this.toastService.show('Gist deleted successfully!');
+                        },
                         error: (error) => {
-                            this.toastService.showToast('Failed to delete former gist.', ToastType.Error);
+                            this.toastService.show('Failed to delete gist.', ToastType.Error);
                         },
                     })
                 );

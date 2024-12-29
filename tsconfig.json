@@ -2,35 +2,42 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./",
     "outDir": "./dist",
     "strict": true,
     "types": [
       "node",
       "express"
     ],
-    "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "isolatedModules": true,
-    "esModuleInterop": true,
     "sourceMap": true,
+    "downlevelIteration": true,
     "declaration": false,
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "ES2022",
-    "module": "ES2022",
+    "target": "es2022",
+    "module": "es2020",
     "lib": [
-      "ES2022",
+      "es2020",
       "dom"
-    ]
+    ],
+    "noUnusedParameters": false,
+    "noUnusedLocals": false,
+    "useDefineForClassFields": false,
+    "strictNullChecks": true,
+    "noImplicitReturns": true,
+    "strictFunctionTypes": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictBindCallApply": true,
+    "esModuleInterop": true
   },
-  "exclude": [
-    "node_modules"
-  ],
   "include": [
     "src/**/*.ts",
     "server.js"

@@ -1,15 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { GistList } from '../../../shared/models/gists';
 import { RouterModule } from '@angular/router';
-import { SortColumnIconPipe } from './sort-column-icon.pipe';
 import { GistTableStore } from './gist-table.store';
+import { MatIconModule } from '@angular/material/icon';
+import { PaginatorComponent } from './paginator/paginator.component';
 
 @Component({
   selector: 'app-gist-table',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, SortColumnIconPipe],
+  imports: [CommonModule, FormsModule, RouterModule, MatIconModule, PaginatorComponent],
   providers: [GistTableStore],
   templateUrl: './gist-table.component.html',
   styleUrl: './gist-table.component.scss'
@@ -17,19 +17,16 @@ import { GistTableStore } from './gist-table.store';
 export class GistTableComponent {
   private store = inject(GistTableStore);
 
-  viewModel$ = this.store.viewModel$;
+  displayedColumns: string[] = ['description', 'updated_at', 'action'];
+
+  viewModel$ = this.store.state$;
 
   toggleAll(event: Event) {
     const isChecked = (event?.target as HTMLInputElement)?.checked;
     this.store.toggleAll(isChecked);
   }
 
-  sort(column: keyof GistList) {
-    this.store.sort(column);
-  }
-
   deleteGist(id: string) {
-    console.log('Deleting gist with id:', id);
     this.store.deleteGist(id);
   }
 

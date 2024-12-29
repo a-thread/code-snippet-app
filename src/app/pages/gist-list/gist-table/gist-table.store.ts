@@ -1,16 +1,15 @@
 import { inject, Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { GistList } from '../../../shared/models/gists';
-import { GistTableVm } from './gist-table-vm';
+import { GistList } from '../../../shared/models/gist-list';
 import { switchMap, tap } from 'rxjs';
 import { GistService } from '../../../shared/services/gist.service';
-import { ToastService } from '../../../toast/toast.service';
-import { ToastType } from '../../../shared/models/toast-message';
+import { ToastService } from '../../../shared/services/toast.service';
+import { ToastType } from 'src/app/shared/models/toast-message';
 
 export interface GistTableState {
     gists: GistList[];
-    sortColumn: keyof GistList | null;
-    sortOrder: 'asc' | 'desc';
+    pageSize: number;
+    currentPage: number;
 }
 
 @Injectable()
@@ -22,34 +21,53 @@ export class GistTableStore extends ComponentStore<GistTableState> {
     constructor() {
         super({
             gists: [],
-            sortColumn: null,
-            sortOrder: 'asc',
+            pageSize: 5,
+            currentPage: 1,
         });
 
-        this.loadSnippets();
+        this.getSnippets();
+        this.getSnippetsOnPageChange(this.getPageTrigger$);
     }
 
     readonly gists$ = this.select((state) => state.gists);
+    readonly currentPage$ = this.select(state => state.currentPage);
+    readonly pageSize$ = this.select(state => state.pageSize);
+    readonly getPageTrigger$ = this.select(
+        this.currentPage$,
+        this.pageSize$,
+        (currentPage, pageSize) => ({ currentPage, pageSize })
+    )
 
-
-    readonly sortedGists$ = this.select(
-        this.gists$,
+    readonly paginatorViewModel$ = this.select(
         this.state$,
-        (gists, { sortColumn, sortOrder }) => {
-            if (!sortColumn) return gists;
+        ({ currentPage, pageSize, gists }) =>
+            gists?.length > 0 ? ({
+                disableNextPage: gists?.length < pageSize,
+                disablePreviousPage: currentPage === 1,
+                currentPage,
+                pageSize
+            }) : null
+    )
 
-            return [...gists].sort((a, b) => {
-                const valueA = a[sortColumn] || '';
-                const valueB = b[sortColumn] || '';
+    readonly setPageSize = this.updater((state, pageSize: number) => ({
+        ...state,
+        pageSize
+    }));
 
-                if (valueA < valueB) return sortOrder === 'asc' ? -1 : 1;
-                if (valueA > valueB) return sortOrder === 'asc' ? 1 : -1;
-                return 0;
-            });
-        });
+    readonly goToNextPage = this.updater(state => ({
+        ...state,
+        currentPage: state.currentPage + 1
+    }));
 
-    viewModel$ = this.select(this.sortedGists$, this.state$, (gists, state): GistTableVm => ({ ...state, sortedGists: gists }));
+    readonly goToPreviousPage = this.updater(state => ({
+        ...state,
+        currentPage: state.currentPage > 1 ? state.currentPage - 1 : 1
+    }));
 
+    readonly goToFirstPage = this.updater(state => ({
+        ...state,
+        currentPage: 1
+    }));
 
     readonly setSnippets = this.updater((state, gists: GistList[]) => ({
         ...state,
@@ -62,19 +80,21 @@ export class GistTableStore extends ComponentStore<GistTableState> {
             gists: state.gists.map((gist) => ({ ...gist, selected: isChecked })),
         };
     });
-    readonly sort = this.updater((state, column: keyof GistList) => {
-        const isSameColumn = state.sortColumn === column;
-        return {
-            ...state,
-            sortColumn: column,
-            sortOrder: isSameColumn ? (state.sortOrder === 'asc' ? 'desc' : 'asc') : 'asc',
-        };
-    });
 
-    readonly loadSnippets = this.effect<void>(trigger$ =>
+    readonly getSnippets = this.effect<void>(trigger$ =>
         trigger$.pipe(
             switchMap(() => {
-                return this.gistService.getList().pipe(
+                return this.gistService.getList(this.get().pageSize, this.get().currentPage).pipe(
+                    tap((gists) => this.setSnippets(gists)),
+                );
+            })
+        )
+    );
+
+    readonly getSnippetsOnPageChange = this.effect<{ pageSize: number, currentPage: number | string }>(trigger$ =>
+        trigger$.pipe(
+            switchMap(({ pageSize, currentPage }) => {
+                return this.gistService.getList(pageSize, currentPage).pipe(
                     tap((gists) => this.setSnippets(gists)),
                 );
             })
@@ -87,10 +107,10 @@ export class GistTableStore extends ComponentStore<GistTableState> {
                 tap({
                     next: () => {
                         this.setSnippets(this.get().gists.filter((gist) => gist.id !== id));
-                        this.toastService.showToast('Gist deleted successfully!');
+                        this.toastService.show('Gist deleted successfully!');
                     },
                     error: (error) => {
-                        this.toastService.showToast('Failed to delete gist', ToastType.Error);
+                        this.toastService.show('Failed to delete gist', ToastType.Error);
                     },
                 })
             ))
